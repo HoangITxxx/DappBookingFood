@@ -1122,6 +1122,30 @@
 						"internalType": "uint128",
 						"name": "",
 						"type": "uint128"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "restaurantMenuIds",
+				"outputs": [
+					{
+						"internalType": "uint128",
+						"name": "",
+						"type": "uint128"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "",
+						"type": "uint128"
 					}
 				],
 				"name": "restaurantOwners",
@@ -1149,6 +1173,87 @@
 						"internalType": "enum SMCFoodDapp.Role",
 						"name": "",
 						"type": "uint8"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "restaurantId",
+						"type": "uint128"
+					},
+					{
+						"internalType": "string",
+						"name": "searchTerm",
+						"type": "string"
+					},
+					{
+						"internalType": "uint128",
+						"name": "start",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "limit",
+						"type": "uint128"
+					}
+				],
+				"name": "searchMenuItems",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint128",
+								"name": "id",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "restaurantId",
+								"type": "uint128"
+							},
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "uint128",
+								"name": "price",
+								"type": "uint128"
+							},
+							{
+								"internalType": "bool",
+								"name": "available",
+								"type": "bool"
+							},
+							{
+								"internalType": "string",
+								"name": "description",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "category",
+								"type": "string"
+							},
+							{
+								"internalType": "uint128",
+								"name": "totalRating",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "ratingCount",
+								"type": "uint128"
+							}
+						],
+						"internalType": "struct SMCFoodDapp.MenuItem[]",
+						"name": "",
+						"type": "tuple[]"
 					}
 				],
 				"stateMutability": "view",
@@ -1400,11 +1505,11 @@
 			]
 		},
 		"contracts/DappBookingFood.sol": {
-			"keccak256": "0xf899efb46cdf3790b0bc06873b0de13d40b73580c951ecb29257513ebb514508",
+			"keccak256": "0xe090964a530acdf3877ac86c52e7471d9e60ec66c80613edbee856f796593c3b",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://16c83a95479d393656df7eaad0f0c641e90f3d30ed80fa6b2807bb800ae7b553",
-				"dweb:/ipfs/QmSgrcL5V2y829hHH3i9no1esySdi4JWF6fVSnPpYQzyze"
+				"bzz-raw://895e2631349fa8890ae36646f3134d5acaf9ef206b5bccf24bffe744d5ba395c",
+				"dweb:/ipfs/QmPyjUxbeEiNrXjLYK3Yguq55Nb5tQAXDj1Lgd9DLKZVtg"
 			]
 		}
 	},

@@ -51,6 +51,7 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
     mapping(address => uint128[]) public ownerRestaurants;
     mapping(uint128 => address) public restaurantOwners; 
     mapping(address => uint128) public staffRestaurant; 
+    mapping(uint128 => uint128[]) public restaurantMenuIds;
 
     // Events
     event MenuItemAdded(uint128 id, uint128 restaurantId, string name);
@@ -240,6 +241,88 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         MenuItem storage item = menuByRestaurant[restaurantId][menuId];
         if (item.ratingCount == 0) return 0;
         return item.totalRating / item.ratingCount;
+    }
+
+    // ================== Search function ==================
+
+    function searchMenuItems(
+        uint128 restaurantId,
+        string memory searchTerm,
+        uint128 start,
+        uint128 limit
+    ) external view returns (MenuItem[] memory) {
+        bytes32 searchHash = keccak256(abi.encodePacked(searchTerm));
+        uint128 count = 0;
+
+        // If restaurantId is 0, search across all restaurants
+        if (restaurantId == 0) {
+            for (uint128 rId = 1; rId < nextRestaurantId; rId++) {
+                for (uint i = 0; i < restaurantMenuIds[rId].length && count < start + limit; i++) {
+                    uint128 menuId = restaurantMenuIds[rId][i];
+                    MenuItem memory item = menuByRestaurant[rId][menuId];
+                    if (item.id != 0 &&
+                        (bytes(searchTerm).length == 0 ||
+                         keccak256(abi.encodePacked(item.name)) == searchHash ||
+                         keccak256(abi.encodePacked(item.category)) == searchHash)) {
+                        if (count >= start) count++;
+                    }
+                }
+            }
+        } else {
+            // Search within specific restaurant
+            require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
+            for (uint i = 0; i < restaurantMenuIds[restaurantId].length && count < start + limit; i++) {
+                uint128 menuId = restaurantMenuIds[restaurantId][i];
+                MenuItem memory item = menuByRestaurant[restaurantId][menuId];
+                if (item.id != 0 &&
+                    (bytes(searchTerm).length == 0 ||
+                     keccak256(abi.encodePacked(item.name)) == searchHash ||
+                     keccak256(abi.encodePacked(item.category)) == searchHash)) {
+                    if (count >= start) count++;
+                }
+            }
+        }
+
+        MenuItem[] memory items = new MenuItem[](count > start ? count - start : 0);
+        uint128 index = 0;
+
+        if (restaurantId == 0) {
+            for (uint128 rId = 1; rId < nextRestaurantId && index < items.length; rId++) {
+                for (uint i = 0; i < restaurantMenuIds[rId].length && index < items.length; i++) {
+                    uint128 menuId = restaurantMenuIds[rId][i];
+                    MenuItem memory item = menuByRestaurant[rId][menuId];
+                    if (item.id != 0 &&
+                        (bytes(searchTerm).length == 0 ||
+                         keccak256(abi.encodePacked(item.name)) == searchHash ||
+                         keccak256(abi.encodePacked(item.category)) == searchHash)) {
+                        if (index >= start) {
+                            items[index - start] = item;
+                            index++;
+                        } else {
+                            index++;
+                        }
+                    }
+                }
+            }
+        } else {
+            for (uint i = 0; i < restaurantMenuIds[restaurantId].length && index < items.length; i++) {
+                uint128 menuId = restaurantMenuIds[restaurantId][i];
+                MenuItem memory item = menuByRestaurant[restaurantId][menuId];
+                if (item.id != 0 &&
+                    (bytes(searchTerm).length == 0 ||
+                     keccak256(abi.encodePacked(item.name)) == searchHash ||
+                     keccak256(abi.encodePacked(item.category)) == searchHash)) {
+                    if (index >= start) {
+                        items[index - start] = item;
+                        index++;
+                    } else {
+                        index++;
+                    }
+                }
+            }
+        }
+
+        return items;
     }
 
     // ================== Paginated View Functions ==================
