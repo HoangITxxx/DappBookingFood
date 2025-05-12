@@ -16,6 +16,7 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         uint128 restaurantId;
         string name;
         string imageUrl;
+        string videoUrl;
         uint128 price;
         bool available;
         string description;
@@ -488,21 +489,21 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         return items;
     }
 
-    // function getAllOrders(uint128 start, uint128 limit) 
-    //     external 
-    //     view 
-    //     onlyAdmin 
-    //     returns (Order[] memory) 
-    // {
-    //     uint128 count = nextOrderId - 1 > start ? nextOrderId - 1 - start : 0;
-    //     if (count > limit) count = limit;
+    function getAllOrders(uint128 start, uint128 limit) 
+        external 
+        view 
+        onlyAdmin 
+        returns (Order[] memory) 
+    {
+        uint128 count = nextOrderId - 1 > start ? nextOrderId - 1 - start : 0;
+        if (count > limit) count = limit;
 
-    //     Order[] memory result = new Order[](count);
-    //     for (uint128 i = 0; i < count; i++) {
-    //         result[i] = orders[start + i + 1];
-    //     }
-    //     return result;
-    // }
+        Order[] memory result = new Order[](count);
+        for (uint128 i = 0; i < count; i++) {
+            result[i] = orders[start + i + 1];
+        }
+        return result;
+    }
 
     // ================== Other Functions ==================
 
@@ -510,6 +511,7 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         uint128 restaurantId,
         string memory name,
         string memory imageUrl,
+        string memory videoUrl,
         uint128 price,
         string memory description,
         string memory category
@@ -521,6 +523,7 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
             restaurantId: restaurantId,
             name: name,
             imageUrl: imageUrl,
+            videoUrl: videoUrl,
             price: price,
             available: true,
             description: description,
@@ -537,6 +540,7 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         uint128 menuId, 
         string memory name, 
         string memory imageUrl,
+        string memory videoUrl,
         uint128 price, 
         bool available,
         string memory description,
@@ -546,6 +550,7 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         MenuItem storage item = menuByRestaurant[restaurantId][menuId];
         item.name = name;
         item.imageUrl = imageUrl;
+        item.videoUrl = videoUrl;
         item.price = price;
         item.available = available;
         item.description = description;
@@ -620,14 +625,14 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         emit OrderStatusUpdated(orderId, status);
     }
 
-    // function getMyOrders() external onlyAdminOrCustomer view returns (Order[] memory) {
-    //     uint128[] storage ids = customerOrders[msg.sender];
-    //     Order[] memory result = new Order[](ids.length);
-    //     for (uint i = 0; i < ids.length; i++) {
-    //         result[i] = orders[ids[i]];
-    //     }
-    //     return result;
-    // }
+    function getMyOrders() external onlyAdminOrCustomer view returns (Order[] memory) {
+        uint128[] storage ids = customerOrders[msg.sender];
+        Order[] memory result = new Order[](ids.length);
+        for (uint i = 0; i < ids.length; i++) {
+            result[i] = orders[ids[i]];
+        }
+        return result;
+    }
 
     function getorderCountDetails(uint128 orderId) 
         external 
@@ -670,23 +675,23 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
     return (order, items, quantities);
 }
 
-    // function previewTotalAmount(uint128 restaurantId, uint128[] memory itemIds, uint128[] memory quantities) 
-    //     external 
-    //     view 
-    //     returns (uint128 totalAmount) 
-    // {
-    //     require(itemIds.length == quantities.length, "Length mismatch");
-    //     require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
-    //     uint128 total = 0;
+    function previewTotalAmount(uint128 restaurantId, uint128[] memory itemIds, uint128[] memory quantities) 
+        external 
+        view 
+        returns (uint128 totalAmount) 
+    {
+        require(itemIds.length == quantities.length, "Length mismatch");
+        require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
+        uint128 total = 0;
 
-    //     for (uint i = 0; i < itemIds.length; i++) {
-    //         MenuItem memory item = menuByRestaurant[restaurantId][itemIds[i]];
-    //         require(item.available, "Item unavailable");
-    //         require(item.restaurantId == restaurantId, "Item does not belong to restaurant");
-    //         total += item.price * quantities[i];
-    //     }
+        for (uint i = 0; i < itemIds.length; i++) {
+            MenuItem memory item = menuByRestaurant[restaurantId][itemIds[i]];
+            require(item.available, "Item unavailable");
+            require(item.restaurantId == restaurantId, "Item does not belong to restaurant");
+            total += item.price * quantities[i];
+        }
 
-    //     uint128 serviceFee = (total * serviceFeePercentage) / 100;
-    //     return total + serviceFee;
-    // }
+        uint128 serviceFee = (total * serviceFeePercentage) / 100;
+        return total + serviceFee;
+    }
 }

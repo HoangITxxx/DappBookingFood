@@ -443,6 +443,11 @@
 						"type": "string"
 					},
 					{
+						"internalType": "string",
+						"name": "videoUrl",
+						"type": "string"
+					},
+					{
 						"internalType": "uint128",
 						"name": "price",
 						"type": "uint128"
@@ -602,6 +607,72 @@
 				"inputs": [
 					{
 						"internalType": "uint128",
+						"name": "start",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "limit",
+						"type": "uint128"
+					}
+				],
+				"name": "getAllOrders",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint128",
+								"name": "id",
+								"type": "uint128"
+							},
+							{
+								"internalType": "address",
+								"name": "customer",
+								"type": "address"
+							},
+							{
+								"internalType": "uint128",
+								"name": "restaurantId",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128[]",
+								"name": "itemIds",
+								"type": "uint128[]"
+							},
+							{
+								"internalType": "uint128[]",
+								"name": "quantities",
+								"type": "uint128[]"
+							},
+							{
+								"internalType": "uint128",
+								"name": "totalPrice",
+								"type": "uint128"
+							},
+							{
+								"internalType": "enum SMCFoodDapp.OrderStatus",
+								"name": "status",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint128",
+								"name": "timestamp",
+								"type": "uint128"
+							}
+						],
+						"internalType": "struct SMCFoodDapp.Order[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
 						"name": "restaurantId",
 						"type": "uint128"
 					},
@@ -716,6 +787,11 @@
 								"type": "string"
 							},
 							{
+								"internalType": "string",
+								"name": "videoUrl",
+								"type": "string"
+							},
+							{
 								"internalType": "uint128",
 								"name": "price",
 								"type": "uint128"
@@ -747,6 +823,61 @@
 							}
 						],
 						"internalType": "struct SMCFoodDapp.MenuItem[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getMyOrders",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint128",
+								"name": "id",
+								"type": "uint128"
+							},
+							{
+								"internalType": "address",
+								"name": "customer",
+								"type": "address"
+							},
+							{
+								"internalType": "uint128",
+								"name": "restaurantId",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128[]",
+								"name": "itemIds",
+								"type": "uint128[]"
+							},
+							{
+								"internalType": "uint128[]",
+								"name": "quantities",
+								"type": "uint128[]"
+							},
+							{
+								"internalType": "uint128",
+								"name": "totalPrice",
+								"type": "uint128"
+							},
+							{
+								"internalType": "enum SMCFoodDapp.OrderStatus",
+								"name": "status",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint128",
+								"name": "timestamp",
+								"type": "uint128"
+							}
+						],
+						"internalType": "struct SMCFoodDapp.Order[]",
 						"name": "",
 						"type": "tuple[]"
 					}
@@ -831,6 +962,11 @@
 							{
 								"internalType": "string",
 								"name": "imageUrl",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "videoUrl",
 								"type": "string"
 							},
 							{
@@ -1022,6 +1158,11 @@
 					{
 						"internalType": "string",
 						"name": "imageUrl",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "videoUrl",
 						"type": "string"
 					},
 					{
@@ -1242,6 +1383,35 @@
 				"name": "placeOrder",
 				"outputs": [],
 				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "restaurantId",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128[]",
+						"name": "itemIds",
+						"type": "uint128[]"
+					},
+					{
+						"internalType": "uint128[]",
+						"name": "quantities",
+						"type": "uint128[]"
+					}
+				],
+				"name": "previewTotalAmount",
+				"outputs": [
+					{
+						"internalType": "uint128",
+						"name": "totalAmount",
+						"type": "uint128"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -1543,6 +1713,11 @@
 						"type": "string"
 					},
 					{
+						"internalType": "string",
+						"name": "videoUrl",
+						"type": "string"
+					},
+					{
 						"internalType": "uint128",
 						"name": "price",
 						"type": "uint128"
@@ -1713,11 +1888,11 @@
 			]
 		},
 		"contracts/DappBookingFood.sol": {
-			"keccak256": "0x4d8232ac11e13b3265522370ec3c3344d6b291e90a2193b532fee3106c12c6a5",
+			"keccak256": "0x531078577a15b6503edf9e5ff1f63bed6f358a7e556c23e45dead2e732162bab",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://3ffddd62e09e5ee9bd1921ccb0e07cbce7d5472f2cd6bcef067c3e885a5537c4",
-				"dweb:/ipfs/QmdDozP3FZfEQcDkpWF3HEbv52o3A7pf2UFJEtRm2zxuzY"
+				"bzz-raw://d74ab8c8ebe4d4fec6a5f9efdcf4c93016c8ec8b2e03a931f029dea9f600b090",
+				"dweb:/ipfs/Qme1JRMz16wgLJW3iW6Qym2zQGfi2mSknoVXezUFHVF6wR"
 			]
 		}
 	},
