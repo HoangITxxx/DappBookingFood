@@ -15,6 +15,7 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         uint128 id;
         uint128 restaurantId;
         string name;
+        string imageUrl;
         uint128 price;
         bool available;
         string description;
@@ -34,6 +35,30 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         uint128 timestamp;
     }
 
+    struct OrderDetail {
+        uint128 menuId; 
+        uint128 quantity;
+        uint128 price; 
+        string name; 
+    }
+
+     struct RatingForEmployee {
+        address customer; 
+        address employee; 
+        uint128 restaurantId; 
+        uint8 rating; 
+        string comment;
+        uint128 timestamp; 
+    }
+
+    struct RatingForRestaurant {
+        address customer; 
+        uint128 restaurantId; 
+        uint8 rating; 
+        string comment; 
+        uint128 timestamp; 
+    }
+
     uint128 private nextMenuId = 1;
     uint128 private nextOrderId = 1;
     uint128 private nextRestaurantId = 1; 
@@ -46,12 +71,16 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
     mapping(address => uint128) public pendingWithdrawals;
     mapping(address => uint128[]) public customerOrders;
     mapping(address => uint128) public userPoints;
-    mapping(uint128 => mapping(uint128 => uint128)) public orderDetails;
+    mapping(uint128 => OrderDetail[]) public orderDetails;
+    mapping(uint128 => mapping(uint128 => uint128)) public orderCountDetails;
     // Added mappings for restaurant ownership and staff
     mapping(address => uint128[]) public ownerRestaurants;
     mapping(uint128 => address) public restaurantOwners; 
     mapping(address => uint128) public staffRestaurant; 
     mapping(uint128 => uint128[]) public restaurantMenuIds;
+    //Added mappings for restaurant do rating for employee and restaurant
+    mapping(address => RatingForEmployee[]) public employeeRatings; 
+    mapping(uint128 => RatingForRestaurant[]) public restaurantRatings;
 
     // Events
     event MenuItemAdded(uint128 id, uint128 restaurantId, string name);
@@ -68,6 +97,8 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
     event OrderCompleted(uint128 orderId, address customer);
     event RestaurantRegistered(uint128 restaurantId, address owner);
     event StaffAssigned(address staff, uint128 restaurantId); 
+    event EmployeeRated(address indexed employee, address indexed customer, uint128 restaurantId, uint8 rating, string comment);
+    event RestaurantRated(uint128 indexed restaurantId, address indexed customer, uint8 rating, string comment);
 
     modifier onlyAdmin() {
         require(roles[msg.sender] == Role.Admin, "Unauthorized: Admin only");
@@ -112,6 +143,13 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         require(restaurantOwners[restaurantId] == msg.sender, "Not restaurant owner");
         _;
     }
+    modifier onlyStaffOrCustomer() {
+        require(
+            roles[msg.sender] == Role.Customer || roles[msg.sender] == Role.Staff,
+            "Unauthorized: Staff or Customer only"
+        );
+        _;
+    }
 
     constructor() Ownable(msg.sender) {
         roles[msg.sender] = Role.Admin;
@@ -138,6 +176,40 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         staffRestaurant[staff] = restaurantId;
         emit StaffAssigned(staff, restaurantId);
     }
+
+    // function getAllMenuByRestaurant(uint128 restaurantId, uint128 start, uint128 limit) 
+    //     external 
+    //     view 
+    //     returns (MenuItem[] memory) 
+    // {
+    //     require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
+        
+    //     uint128 count = 0;
+    //     for (uint i = 0; i < restaurantMenuIds[restaurantId].length && count < start + limit; i++) {
+    //         uint128 menuId = restaurantMenuIds[restaurantId][i];
+    //         if (menuByRestaurant[restaurantId][menuId].id != 0) {
+    //             if (count >= start) count++;
+    //         }
+    //     }
+
+    //     MenuItem[] memory items = new MenuItem[](count > start ? count - start : 0);
+    //     uint128 index = 0;
+
+    //     for (uint i = 0; i < restaurantMenuIds[restaurantId].length && index < items.length; i++) {
+    //         uint128 menuId = restaurantMenuIds[restaurantId][i];
+    //         MenuItem memory item = menuByRestaurant[restaurantId][menuId];
+    //         if (item.id != 0) {
+    //             if (index >= start) {
+    //                 items[index - start] = item;
+    //                 index++;
+    //             } else {
+    //                 index++;
+    //             }
+    //         }
+    //     }
+
+    //     return items;
+    // }
 
     // ================== Admin functions ==================
 
@@ -187,12 +259,19 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
         
         uint128 total = 0;
+        OrderDetail[] memory  details = new OrderDetail[](itemIds.length);
         for (uint i = 0; i < itemIds.length; i++) {
             MenuItem storage item = menuByRestaurant[restaurantId][itemIds[i]];
             require(item.available, "Item unavailable");
             require(item.restaurantId == restaurantId, "Item does not belong to restaurant");
             total += item.price * quantities[i];
-            orderDetails[nextOrderId][itemIds[i]] = quantities[i];
+            orderCountDetails[nextOrderId][itemIds[i]] = quantities[i];
+            details[i] = OrderDetail({
+                menuId: itemIds[i],
+                quantity: quantities[i],
+                price: item.price,
+                name: item.name
+            });
         }
 
         uint128 serviceFee = (total * serviceFeePercentage) / 100;
@@ -213,6 +292,10 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
             status: OrderStatus.Placed,
             timestamp: uint128(block.timestamp)
         });
+
+        for (uint i = 0; i < details.length; i++){
+            orderDetails[nextOrderId].push(details[i]);
+        }
 
         customerOrders[msg.sender].push(nextOrderId);
         pendingWithdrawals[owner()] += serviceFee;
@@ -243,87 +326,144 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         return item.totalRating / item.ratingCount;
     }
 
-    // ================== Search function ==================
-
-    function searchMenuItems(
-        uint128 restaurantId,
-        string memory searchTerm,
-        uint128 start,
-        uint128 limit
-    ) external view returns (MenuItem[] memory) {
-        bytes32 searchHash = keccak256(abi.encodePacked(searchTerm));
-        uint128 count = 0;
-
-        // If restaurantId is 0, search across all restaurants
-        if (restaurantId == 0) {
-            for (uint128 rId = 1; rId < nextRestaurantId; rId++) {
-                for (uint i = 0; i < restaurantMenuIds[rId].length && count < start + limit; i++) {
-                    uint128 menuId = restaurantMenuIds[rId][i];
-                    MenuItem memory item = menuByRestaurant[rId][menuId];
-                    if (item.id != 0 &&
-                        (bytes(searchTerm).length == 0 ||
-                         keccak256(abi.encodePacked(item.name)) == searchHash ||
-                         keccak256(abi.encodePacked(item.category)) == searchHash)) {
-                        if (count >= start) count++;
-                    }
-                }
-            }
-        } else {
-            // Search within specific restaurant
-            require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
-            for (uint i = 0; i < restaurantMenuIds[restaurantId].length && count < start + limit; i++) {
-                uint128 menuId = restaurantMenuIds[restaurantId][i];
-                MenuItem memory item = menuByRestaurant[restaurantId][menuId];
-                if (item.id != 0 &&
-                    (bytes(searchTerm).length == 0 ||
-                     keccak256(abi.encodePacked(item.name)) == searchHash ||
-                     keccak256(abi.encodePacked(item.category)) == searchHash)) {
-                    if (count >= start) count++;
-                }
-            }
-        }
-
-        MenuItem[] memory items = new MenuItem[](count > start ? count - start : 0);
-        uint128 index = 0;
-
-        if (restaurantId == 0) {
-            for (uint128 rId = 1; rId < nextRestaurantId && index < items.length; rId++) {
-                for (uint i = 0; i < restaurantMenuIds[rId].length && index < items.length; i++) {
-                    uint128 menuId = restaurantMenuIds[rId][i];
-                    MenuItem memory item = menuByRestaurant[rId][menuId];
-                    if (item.id != 0 &&
-                        (bytes(searchTerm).length == 0 ||
-                         keccak256(abi.encodePacked(item.name)) == searchHash ||
-                         keccak256(abi.encodePacked(item.category)) == searchHash)) {
-                        if (index >= start) {
-                            items[index - start] = item;
-                            index++;
-                        } else {
-                            index++;
-                        }
-                    }
-                }
-            }
-        } else {
-            for (uint i = 0; i < restaurantMenuIds[restaurantId].length && index < items.length; i++) {
-                uint128 menuId = restaurantMenuIds[restaurantId][i];
-                MenuItem memory item = menuByRestaurant[restaurantId][menuId];
-                if (item.id != 0 &&
-                    (bytes(searchTerm).length == 0 ||
-                     keccak256(abi.encodePacked(item.name)) == searchHash ||
-                     keccak256(abi.encodePacked(item.category)) == searchHash)) {
-                    if (index >= start) {
-                        items[index - start] = item;
-                        index++;
-                    } else {
-                        index++;
-                    }
-                }
-            }
-        }
-
-        return items;
+    function rateEmployee(address employee, uint128 restaurantId, uint8 rating, string memory comment) 
+        external 
+        onlyStaffOrCustomer 
+    {
+        require(rating >= 1 && rating <= 5, "Rating must be between 1 and 5");
+        require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
+        require(roles[employee] == Role.Staff && staffRestaurant[employee] == restaurantId, "Invalid employee");
+        
+        RatingForEmployee memory newRating = RatingForEmployee({
+            customer: msg.sender,
+            employee: employee,
+            restaurantId: restaurantId,
+            rating: rating,
+            comment: comment,
+            timestamp: uint128(block.timestamp)
+        });
+        
+        employeeRatings[employee].push(newRating);
+        emit EmployeeRated(employee, msg.sender, restaurantId, rating, comment);
     }
+
+    function rateRestaurant(uint128 restaurantId, uint8 rating, string memory comment) 
+        external 
+        onlyAdminOrCustomer 
+    {
+        require(rating >= 1 && rating <= 5, "Rating must be between 1 and 5");
+        require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
+        
+        RatingForRestaurant memory newRating = RatingForRestaurant({
+            customer: msg.sender,
+            restaurantId: restaurantId,
+            rating: rating,
+            comment: comment,
+            timestamp: uint128(block.timestamp)
+        });
+        
+        restaurantRatings[restaurantId].push(newRating);
+        emit RestaurantRated(restaurantId, msg.sender, rating, comment);
+    }
+
+    function getEmployeeRatings(address employee) 
+        external 
+        view 
+        returns (RatingForEmployee[] memory) 
+    {
+        return employeeRatings[employee];
+    }
+
+    function getRestaurantRatings(uint128 restaurantId) 
+        external 
+        view 
+        returns (RatingForRestaurant[] memory) 
+    {
+        require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
+        return restaurantRatings[restaurantId];
+    }
+
+    // // ================== Search function ==================
+
+    // function searchMenuItems(
+    //     uint128 restaurantId,
+    //     string memory searchTerm,
+    //     uint128 start,
+    //     uint128 limit
+    // ) external view returns (MenuItem[] memory) {
+    //     bytes32 searchHash = keccak256(abi.encodePacked(searchTerm));
+    //     uint128 count = 0;
+
+    //     // If restaurantId is 0, search across all restaurants
+    //     if (restaurantId == 0) {
+    //         for (uint128 rId = 1; rId < nextRestaurantId; rId++) {
+    //             for (uint i = 0; i < restaurantMenuIds[rId].length && count < start + limit; i++) {
+    //                 uint128 menuId = restaurantMenuIds[rId][i];
+    //                 MenuItem memory item = menuByRestaurant[rId][menuId];
+    //                 if (item.id != 0 &&
+    //                     (bytes(searchTerm).length == 0 ||
+    //                      keccak256(abi.encodePacked(item.name)) == searchHash ||
+    //                      keccak256(abi.encodePacked(item.category)) == searchHash)) {
+    //                     if (count >= start) count++;
+    //                 }
+    //             }
+    //         }
+    //     } else {
+    //         // Search within specific restaurant
+    //         require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
+    //         for (uint i = 0; i < restaurantMenuIds[restaurantId].length && count < start + limit; i++) {
+    //             uint128 menuId = restaurantMenuIds[restaurantId][i];
+    //             MenuItem memory item = menuByRestaurant[restaurantId][menuId];
+    //             if (item.id != 0 &&
+    //                 (bytes(searchTerm).length == 0 ||
+    //                  keccak256(abi.encodePacked(item.name)) == searchHash ||
+    //                  keccak256(abi.encodePacked(item.category)) == searchHash)) {
+    //                 if (count >= start) count++;
+    //             }
+    //         }
+    //     }
+
+    //     MenuItem[] memory items = new MenuItem[](count > start ? count - start : 0);
+    //     uint128 index = 0;
+
+    //     if (restaurantId == 0) {
+    //         for (uint128 rId = 1; rId < nextRestaurantId && index < items.length; rId++) {
+    //             for (uint i = 0; i < restaurantMenuIds[rId].length && index < items.length; i++) {
+    //                 uint128 menuId = restaurantMenuIds[rId][i];
+    //                 MenuItem memory item = menuByRestaurant[rId][menuId];
+    //                 if (item.id != 0 &&
+    //                     (bytes(searchTerm).length == 0 ||
+    //                      keccak256(abi.encodePacked(item.name)) == searchHash ||
+    //                      keccak256(abi.encodePacked(item.category)) == searchHash)) {
+    //                     if (index >= start) {
+    //                         items[index - start] = item;
+    //                         index++;
+    //                     } else {
+    //                         index++;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     } else {
+    //         for (uint i = 0; i < restaurantMenuIds[restaurantId].length && index < items.length; i++) {
+    //             uint128 menuId = restaurantMenuIds[restaurantId][i];
+    //             MenuItem memory item = menuByRestaurant[restaurantId][menuId];
+    //             if (item.id != 0 &&
+    //                 (bytes(searchTerm).length == 0 ||
+    //                  keccak256(abi.encodePacked(item.name)) == searchHash ||
+    //                  keccak256(abi.encodePacked(item.category)) == searchHash)) {
+    //                 if (index >= start) {
+    //                     items[index - start] = item;
+    //                     index++;
+    //                 } else {
+    //                     index++;
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return items;
+    // }
 
     // ================== Paginated View Functions ==================
 
@@ -348,27 +488,28 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         return items;
     }
 
-    function getAllOrders(uint128 start, uint128 limit) 
-        external 
-        view 
-        onlyAdmin 
-        returns (Order[] memory) 
-    {
-        uint128 count = nextOrderId - 1 > start ? nextOrderId - 1 - start : 0;
-        if (count > limit) count = limit;
+    // function getAllOrders(uint128 start, uint128 limit) 
+    //     external 
+    //     view 
+    //     onlyAdmin 
+    //     returns (Order[] memory) 
+    // {
+    //     uint128 count = nextOrderId - 1 > start ? nextOrderId - 1 - start : 0;
+    //     if (count > limit) count = limit;
 
-        Order[] memory result = new Order[](count);
-        for (uint128 i = 0; i < count; i++) {
-            result[i] = orders[start + i + 1];
-        }
-        return result;
-    }
+    //     Order[] memory result = new Order[](count);
+    //     for (uint128 i = 0; i < count; i++) {
+    //         result[i] = orders[start + i + 1];
+    //     }
+    //     return result;
+    // }
 
     // ================== Other Functions ==================
 
     function addMenuItem(
         uint128 restaurantId,
         string memory name,
+        string memory imageUrl,
         uint128 price,
         string memory description,
         string memory category
@@ -379,6 +520,7 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
             id: nextMenuId,
             restaurantId: restaurantId,
             name: name,
+            imageUrl: imageUrl,
             price: price,
             available: true,
             description: description,
@@ -394,6 +536,7 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         uint128 restaurantId,
         uint128 menuId, 
         string memory name, 
+        string memory imageUrl,
         uint128 price, 
         bool available,
         string memory description,
@@ -402,6 +545,7 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         require(bytes(name).length > 0 && price > 0, "Invalid data");
         MenuItem storage item = menuByRestaurant[restaurantId][menuId];
         item.name = name;
+        item.imageUrl = imageUrl;
         item.price = price;
         item.available = available;
         item.description = description;
@@ -476,53 +620,73 @@ contract SMCFoodDapp is ReentrancyGuard, Ownable {
         emit OrderStatusUpdated(orderId, status);
     }
 
-    function getMyOrders() external view returns (Order[] memory) {
-        uint128[] storage ids = customerOrders[msg.sender];
-        Order[] memory result = new Order[](ids.length);
-        for (uint i = 0; i < ids.length; i++) {
-            result[i] = orders[ids[i]];
-        }
-        return result;
-    }
+    // function getMyOrders() external onlyAdminOrCustomer view returns (Order[] memory) {
+    //     uint128[] storage ids = customerOrders[msg.sender];
+    //     Order[] memory result = new Order[](ids.length);
+    //     for (uint i = 0; i < ids.length; i++) {
+    //         result[i] = orders[ids[i]];
+    //     }
+    //     return result;
+    // }
 
-    function getOrderDetails(uint128 orderId) 
+    function getorderCountDetails(uint128 orderId) 
         external 
         view 
         validOrderId(orderId) 
         returns (
             Order memory order,
-            MenuItem[] memory items,
             uint128[] memory quantities
         ) 
     {
         order = orders[orderId];
-        items = new MenuItem[](order.itemIds.length);
-        quantities = order.quantities;
-        
+        quantities = new uint128[](order.itemIds.length);
         for (uint i = 0; i < order.itemIds.length; i++) {
-            items[i] = menuByRestaurant[order.restaurantId][order.itemIds[i]];
+            quantities[i] = orderCountDetails[orderId][order.itemIds[i]]; 
         }
         
-        return (order, items, quantities);
+        return (order, quantities);
     }
-
-    function previewTotalAmount(uint128 restaurantId, uint128[] memory itemIds, uint128[] memory quantities) 
-        external 
-        view 
-        returns (uint128 totalAmount) 
-    {
-        require(itemIds.length == quantities.length, "Length mismatch");
-        require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
-        uint128 total = 0;
-
-        for (uint i = 0; i < itemIds.length; i++) {
-            MenuItem memory item = menuByRestaurant[restaurantId][itemIds[i]];
-            require(item.available, "Item unavailable");
-            require(item.restaurantId == restaurantId, "Item does not belong to restaurant");
-            total += item.price * quantities[i];
-        }
-
-        uint128 serviceFee = (total * serviceFeePercentage) / 100;
-        return total + serviceFee;
+    function getOrderDetails(uint128 orderId) 
+    external 
+    view 
+    validOrderId(orderId) 
+    returns (
+        Order memory order,
+        MenuItem[] memory items,
+        uint128[] memory quantities
+    ) 
+{
+    order = orders[orderId];
+    OrderDetail[] memory details = orderDetails[orderId];
+    
+    items = new MenuItem[](details.length);
+    quantities = new uint128[](details.length);
+    
+    for (uint i = 0; i < details.length; i++) {
+        items[i] = menuByRestaurant[order.restaurantId][details[i].menuId];
+        quantities[i] = details[i].quantity;
     }
+    
+    return (order, items, quantities);
+}
+
+    // function previewTotalAmount(uint128 restaurantId, uint128[] memory itemIds, uint128[] memory quantities) 
+    //     external 
+    //     view 
+    //     returns (uint128 totalAmount) 
+    // {
+    //     require(itemIds.length == quantities.length, "Length mismatch");
+    //     require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
+    //     uint128 total = 0;
+
+    //     for (uint i = 0; i < itemIds.length; i++) {
+    //         MenuItem memory item = menuByRestaurant[restaurantId][itemIds[i]];
+    //         require(item.available, "Item unavailable");
+    //         require(item.restaurantId == restaurantId, "Item does not belong to restaurant");
+    //         total += item.price * quantities[i];
+    //     }
+
+    //     uint128 serviceFee = (total * serviceFeePercentage) / 100;
+    //     return total + serviceFee;
+    // }
 }
