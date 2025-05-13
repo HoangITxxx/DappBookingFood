@@ -1,0 +1,2504 @@
+{
+	"id": "167f44bce2bddaa6eadd1fc140173792",
+	"_format": "hh-sol-build-info-1",
+	"solcVersion": "0.8.30",
+	"solcLongVersion": "0.8.30+commit.73712a01",
+	"input": {
+		"language": "Solidity",
+		"sources": {
+			"interfaces/IRatingManager.sol": {
+				"content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.24;\r\n\r\nimport \"../types/Structs.sol\";\r\n\r\ninterface IRatingManager {\r\n    event EmployeeRated(address indexed employee, address indexed customer, uint128 restaurantId, uint8 rating, string comment);\r\n    event RestaurantRated(uint128 indexed restaurantId, address indexed customer, uint8 rating, string comment);\r\n\r\n    function rateEmployee(address employee, uint128 restaurantId, uint8 rating, string memory comment) external;\r\n    function rateRestaurant(uint128 restaurantId, uint8 rating, string memory comment) external;\r\n    function getEmployeeRatings(address employee) external view returns (Structs.RatingForEmployee[] memory);\r\n    function getRestaurantRatings(uint128 restaurantId) external view returns (Structs.RatingForRestaurant[] memory);\r\n}"
+			},
+			"types/Structs.sol": {
+				"content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.24;\r\n\r\ncontract Structs {\r\n    enum Role { Customer, Staff, Admin }\r\n    enum OrderStatus { Placed, Confirmed, Preparing, Ready, Cancelled, Completed }\r\n\r\n    struct MenuItem {\r\n        uint128 id;\r\n        uint128 restaurantId;\r\n        string name;\r\n        string imageUrl;\r\n        string videoUrl;\r\n        uint128 price;\r\n        bool available;\r\n        string description;\r\n        string category;\r\n        uint128 totalRating;\r\n        uint128 ratingCount;\r\n    }\r\n\r\n    struct Order {\r\n        uint128 id;\r\n        address customer;\r\n        uint128 restaurantId;\r\n        uint128[] itemIds;\r\n        uint128[] quantities;\r\n        uint128 totalPrice;\r\n        OrderStatus status;\r\n        uint128 timestamp;\r\n    }\r\n\r\n    struct OrderDetail {\r\n        uint128 menuId;\r\n        uint128 quantity;\r\n        uint128 price;\r\n        string name;\r\n    }\r\n\r\n    struct RatingForEmployee {\r\n        address customer;\r\n        address employee;\r\n        uint128 restaurantId;\r\n        uint8 rating;\r\n        string comment;\r\n        uint128 timestamp;\r\n    }\r\n\r\n    struct RatingForRestaurant {\r\n        address customer;\r\n        uint128 restaurantId;\r\n        uint8 rating;\r\n        string comment;\r\n        uint128 timestamp;\r\n    }\r\n}"
+			}
+		},
+		"settings": {
+			"optimizer": {
+				"enabled": true,
+				"runs": 0
+			},
+			"outputSelection": {
+				"*": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"metadata",
+						"devdoc",
+						"userdoc",
+						"storageLayout",
+						"evm.legacyAssembly",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"evm.gasEstimates",
+						"evm.assembly"
+					]
+				}
+			},
+			"remappings": []
+		}
+	},
+	"output": {
+		"contracts": {
+			"interfaces/IRatingManager.sol": {
+				"IRatingManager": {
+					"abi": [
+						{
+							"anonymous": false,
+							"inputs": [
+								{
+									"indexed": true,
+									"internalType": "address",
+									"name": "employee",
+									"type": "address"
+								},
+								{
+									"indexed": true,
+									"internalType": "address",
+									"name": "customer",
+									"type": "address"
+								},
+								{
+									"indexed": false,
+									"internalType": "uint128",
+									"name": "restaurantId",
+									"type": "uint128"
+								},
+								{
+									"indexed": false,
+									"internalType": "uint8",
+									"name": "rating",
+									"type": "uint8"
+								},
+								{
+									"indexed": false,
+									"internalType": "string",
+									"name": "comment",
+									"type": "string"
+								}
+							],
+							"name": "EmployeeRated",
+							"type": "event"
+						},
+						{
+							"anonymous": false,
+							"inputs": [
+								{
+									"indexed": true,
+									"internalType": "uint128",
+									"name": "restaurantId",
+									"type": "uint128"
+								},
+								{
+									"indexed": true,
+									"internalType": "address",
+									"name": "customer",
+									"type": "address"
+								},
+								{
+									"indexed": false,
+									"internalType": "uint8",
+									"name": "rating",
+									"type": "uint8"
+								},
+								{
+									"indexed": false,
+									"internalType": "string",
+									"name": "comment",
+									"type": "string"
+								}
+							],
+							"name": "RestaurantRated",
+							"type": "event"
+						},
+						{
+							"inputs": [
+								{
+									"internalType": "address",
+									"name": "employee",
+									"type": "address"
+								}
+							],
+							"name": "getEmployeeRatings",
+							"outputs": [
+								{
+									"components": [
+										{
+											"internalType": "address",
+											"name": "customer",
+											"type": "address"
+										},
+										{
+											"internalType": "address",
+											"name": "employee",
+											"type": "address"
+										},
+										{
+											"internalType": "uint128",
+											"name": "restaurantId",
+											"type": "uint128"
+										},
+										{
+											"internalType": "uint8",
+											"name": "rating",
+											"type": "uint8"
+										},
+										{
+											"internalType": "string",
+											"name": "comment",
+											"type": "string"
+										},
+										{
+											"internalType": "uint128",
+											"name": "timestamp",
+											"type": "uint128"
+										}
+									],
+									"internalType": "struct Structs.RatingForEmployee[]",
+									"name": "",
+									"type": "tuple[]"
+								}
+							],
+							"stateMutability": "view",
+							"type": "function"
+						},
+						{
+							"inputs": [
+								{
+									"internalType": "uint128",
+									"name": "restaurantId",
+									"type": "uint128"
+								}
+							],
+							"name": "getRestaurantRatings",
+							"outputs": [
+								{
+									"components": [
+										{
+											"internalType": "address",
+											"name": "customer",
+											"type": "address"
+										},
+										{
+											"internalType": "uint128",
+											"name": "restaurantId",
+											"type": "uint128"
+										},
+										{
+											"internalType": "uint8",
+											"name": "rating",
+											"type": "uint8"
+										},
+										{
+											"internalType": "string",
+											"name": "comment",
+											"type": "string"
+										},
+										{
+											"internalType": "uint128",
+											"name": "timestamp",
+											"type": "uint128"
+										}
+									],
+									"internalType": "struct Structs.RatingForRestaurant[]",
+									"name": "",
+									"type": "tuple[]"
+								}
+							],
+							"stateMutability": "view",
+							"type": "function"
+						},
+						{
+							"inputs": [
+								{
+									"internalType": "address",
+									"name": "employee",
+									"type": "address"
+								},
+								{
+									"internalType": "uint128",
+									"name": "restaurantId",
+									"type": "uint128"
+								},
+								{
+									"internalType": "uint8",
+									"name": "rating",
+									"type": "uint8"
+								},
+								{
+									"internalType": "string",
+									"name": "comment",
+									"type": "string"
+								}
+							],
+							"name": "rateEmployee",
+							"outputs": [],
+							"stateMutability": "nonpayable",
+							"type": "function"
+						},
+						{
+							"inputs": [
+								{
+									"internalType": "uint128",
+									"name": "restaurantId",
+									"type": "uint128"
+								},
+								{
+									"internalType": "uint8",
+									"name": "rating",
+									"type": "uint8"
+								},
+								{
+									"internalType": "string",
+									"name": "comment",
+									"type": "string"
+								}
+							],
+							"name": "rateRestaurant",
+							"outputs": [],
+							"stateMutability": "nonpayable",
+							"type": "function"
+						}
+					],
+					"devdoc": {
+						"kind": "dev",
+						"methods": {},
+						"version": 1
+					},
+					"evm": {
+						"assembly": "",
+						"bytecode": {
+							"functionDebugData": {},
+							"generatedSources": [],
+							"linkReferences": {},
+							"object": "",
+							"opcodes": "",
+							"sourceMap": ""
+						},
+						"deployedBytecode": {
+							"functionDebugData": {},
+							"generatedSources": [],
+							"immutableReferences": {},
+							"linkReferences": {},
+							"object": "",
+							"opcodes": "",
+							"sourceMap": ""
+						},
+						"gasEstimates": null,
+						"legacyAssembly": null,
+						"methodIdentifiers": {
+							"getEmployeeRatings(address)": "90a815a9",
+							"getRestaurantRatings(uint128)": "6e1f4b75",
+							"rateEmployee(address,uint128,uint8,string)": "49392b3d",
+							"rateRestaurant(uint128,uint8,string)": "515f72ce"
+						}
+					},
+					"metadata": "{\"compiler\":{\"version\":\"0.8.30+commit.73712a01\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"employee\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"customer\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint128\",\"name\":\"restaurantId\",\"type\":\"uint128\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"rating\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"comment\",\"type\":\"string\"}],\"name\":\"EmployeeRated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint128\",\"name\":\"restaurantId\",\"type\":\"uint128\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"customer\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint8\",\"name\":\"rating\",\"type\":\"uint8\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"comment\",\"type\":\"string\"}],\"name\":\"RestaurantRated\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"employee\",\"type\":\"address\"}],\"name\":\"getEmployeeRatings\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"customer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"employee\",\"type\":\"address\"},{\"internalType\":\"uint128\",\"name\":\"restaurantId\",\"type\":\"uint128\"},{\"internalType\":\"uint8\",\"name\":\"rating\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"comment\",\"type\":\"string\"},{\"internalType\":\"uint128\",\"name\":\"timestamp\",\"type\":\"uint128\"}],\"internalType\":\"struct Structs.RatingForEmployee[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint128\",\"name\":\"restaurantId\",\"type\":\"uint128\"}],\"name\":\"getRestaurantRatings\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"customer\",\"type\":\"address\"},{\"internalType\":\"uint128\",\"name\":\"restaurantId\",\"type\":\"uint128\"},{\"internalType\":\"uint8\",\"name\":\"rating\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"comment\",\"type\":\"string\"},{\"internalType\":\"uint128\",\"name\":\"timestamp\",\"type\":\"uint128\"}],\"internalType\":\"struct Structs.RatingForRestaurant[]\",\"name\":\"\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"employee\",\"type\":\"address\"},{\"internalType\":\"uint128\",\"name\":\"restaurantId\",\"type\":\"uint128\"},{\"internalType\":\"uint8\",\"name\":\"rating\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"comment\",\"type\":\"string\"}],\"name\":\"rateEmployee\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint128\",\"name\":\"restaurantId\",\"type\":\"uint128\"},{\"internalType\":\"uint8\",\"name\":\"rating\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"comment\",\"type\":\"string\"}],\"name\":\"rateRestaurant\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"interfaces/IRatingManager.sol\":\"IRatingManager\"},\"evmVersion\":\"prague\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":0},\"remappings\":[]},\"sources\":{\"interfaces/IRatingManager.sol\":{\"keccak256\":\"0xa9147f76eac5d0916e02a128abb5461e21a2f745e277120b17308ccb1023d520\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://b0d0953968d232ca77d15966ddab777b170576010b1c23b30439d2d14bf77ca4\",\"dweb:/ipfs/QmPBRGdUoLNrBzJDbQ4jMk6dHrkhNBUAz8A3d9NZdnTCAQ\"]},\"types/Structs.sol\":{\"keccak256\":\"0x413f0168cb488bdb09610b6ecfe14de1bbb4aeb35afa24d133a50bdcb7d7ea4d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bce49ef8e4680650022b70f9038cc2ca8f31d887458dc063110c1e6d18a0338c\",\"dweb:/ipfs/QmP2sM6QfwLDA3q8FwzE6JLsKFP6BXyDy5g8fz94EtPoR1\"]}},\"version\":1}",
+					"storageLayout": {
+						"storage": [],
+						"types": null
+					},
+					"userdoc": {
+						"kind": "user",
+						"methods": {},
+						"version": 1
+					}
+				}
+			},
+			"types/Structs.sol": {
+				"Structs": {
+					"abi": [],
+					"devdoc": {
+						"kind": "dev",
+						"methods": {},
+						"version": 1
+					},
+					"evm": {
+						"assembly": "    /* \"types/Structs.sol\":61:1295  contract Structs {... */\n  mstore(0x40, 0x80)\n  callvalue\n  dup1\n  iszero\n  tag_1\n  jumpi\n  revert(0x00, 0x00)\ntag_1:\n  pop\n  dataSize(sub_0)\n  dup1\n  dataOffset(sub_0)\n  0x00\n  codecopy\n  0x00\n  return\nstop\n\nsub_0: assembly {\n        /* \"types/Structs.sol\":61:1295  contract Structs {... */\n      mstore(0x40, 0x80)\n      revert(0x00, 0x00)\n\n    auxdata: 0xa26469706673582212202562d0fc36850b4225cef989d7371c54d288b78ac110067c4dea05e63a61f77764736f6c634300081e0033\n}\n",
+						"bytecode": {
+							"functionDebugData": {},
+							"generatedSources": [],
+							"linkReferences": {},
+							"object": "6080604052348015600e575f5ffd5b50603e80601a5f395ff3fe60806040525f5ffdfea26469706673582212202562d0fc36850b4225cef989d7371c54d288b78ac110067c4dea05e63a61f77764736f6c634300081e0033",
+							"opcodes": "PUSH1 0x80 PUSH1 0x40 MSTORE CALLVALUE DUP1 ISZERO PUSH1 0xE JUMPI PUSH0 PUSH0 REVERT JUMPDEST POP PUSH1 0x3E DUP1 PUSH1 0x1A PUSH0 CODECOPY PUSH0 RETURN INVALID PUSH1 0x80 PUSH1 0x40 MSTORE PUSH0 PUSH0 REVERT INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 0x25 PUSH3 0xD0FC36 DUP6 SIGNEXTEND TIMESTAMP 0x25 0xCE EXTDELEGATECALL DUP10 0xD7 CALLDATACOPY SHR SLOAD 0xD2 DUP9 0xB7 DUP11 0xC1 LT MOD PUSH29 0x4DEA05E63A61F77764736F6C634300081E003300000000000000000000 ",
+							"sourceMap": "61:1234:1:-:0;;;;;;;;;;;;;;;;;;;"
+						},
+						"deployedBytecode": {
+							"functionDebugData": {},
+							"generatedSources": [],
+							"immutableReferences": {},
+							"linkReferences": {},
+							"object": "60806040525f5ffdfea26469706673582212202562d0fc36850b4225cef989d7371c54d288b78ac110067c4dea05e63a61f77764736f6c634300081e0033",
+							"opcodes": "PUSH1 0x80 PUSH1 0x40 MSTORE PUSH0 PUSH0 REVERT INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 0x25 PUSH3 0xD0FC36 DUP6 SIGNEXTEND TIMESTAMP 0x25 0xCE EXTDELEGATECALL DUP10 0xD7 CALLDATACOPY SHR SLOAD 0xD2 DUP9 0xB7 DUP11 0xC1 LT MOD PUSH29 0x4DEA05E63A61F77764736F6C634300081E003300000000000000000000 ",
+							"sourceMap": "61:1234:1:-:0;;;;;"
+						},
+						"gasEstimates": {
+							"creation": {
+								"codeDepositCost": "12400",
+								"executionCost": "64",
+								"totalCost": "12464"
+							}
+						},
+						"legacyAssembly": {
+							".code": [
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "PUSH",
+									"source": 1,
+									"value": "80"
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "PUSH",
+									"source": 1,
+									"value": "40"
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "MSTORE",
+									"source": 1
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "CALLVALUE",
+									"source": 1
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "DUP1",
+									"source": 1
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "ISZERO",
+									"source": 1
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "PUSH [tag]",
+									"source": 1,
+									"value": "1"
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "JUMPI",
+									"source": 1
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "PUSH",
+									"source": 1,
+									"value": "0"
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "PUSH",
+									"source": 1,
+									"value": "0"
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "REVERT",
+									"source": 1
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "tag",
+									"source": 1,
+									"value": "1"
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "JUMPDEST",
+									"source": 1
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "POP",
+									"source": 1
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "PUSH #[$]",
+									"source": 1,
+									"value": "0000000000000000000000000000000000000000000000000000000000000000"
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "DUP1",
+									"source": 1
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "PUSH [$]",
+									"source": 1,
+									"value": "0000000000000000000000000000000000000000000000000000000000000000"
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "PUSH",
+									"source": 1,
+									"value": "0"
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "CODECOPY",
+									"source": 1
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "PUSH",
+									"source": 1,
+									"value": "0"
+								},
+								{
+									"begin": 61,
+									"end": 1295,
+									"name": "RETURN",
+									"source": 1
+								}
+							],
+							".data": {
+								"0": {
+									".auxdata": "a26469706673582212202562d0fc36850b4225cef989d7371c54d288b78ac110067c4dea05e63a61f77764736f6c634300081e0033",
+									".code": [
+										{
+											"begin": 61,
+											"end": 1295,
+											"name": "PUSH",
+											"source": 1,
+											"value": "80"
+										},
+										{
+											"begin": 61,
+											"end": 1295,
+											"name": "PUSH",
+											"source": 1,
+											"value": "40"
+										},
+										{
+											"begin": 61,
+											"end": 1295,
+											"name": "MSTORE",
+											"source": 1
+										},
+										{
+											"begin": 61,
+											"end": 1295,
+											"name": "PUSH",
+											"source": 1,
+											"value": "0"
+										},
+										{
+											"begin": 61,
+											"end": 1295,
+											"name": "PUSH",
+											"source": 1,
+											"value": "0"
+										},
+										{
+											"begin": 61,
+											"end": 1295,
+											"name": "REVERT",
+											"source": 1
+										}
+									]
+								}
+							},
+							"sourceList": [
+								"interfaces/IRatingManager.sol",
+								"types/Structs.sol",
+								"#utility.yul"
+							]
+						},
+						"methodIdentifiers": {}
+					},
+					"metadata": "{\"compiler\":{\"version\":\"0.8.30+commit.73712a01\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"types/Structs.sol\":\"Structs\"},\"evmVersion\":\"prague\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":0},\"remappings\":[]},\"sources\":{\"types/Structs.sol\":{\"keccak256\":\"0x413f0168cb488bdb09610b6ecfe14de1bbb4aeb35afa24d133a50bdcb7d7ea4d\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://bce49ef8e4680650022b70f9038cc2ca8f31d887458dc063110c1e6d18a0338c\",\"dweb:/ipfs/QmP2sM6QfwLDA3q8FwzE6JLsKFP6BXyDy5g8fz94EtPoR1\"]}},\"version\":1}",
+					"storageLayout": {
+						"storage": [],
+						"types": null
+					},
+					"userdoc": {
+						"kind": "user",
+						"methods": {},
+						"version": 1
+					}
+				}
+			}
+		},
+		"sources": {
+			"interfaces/IRatingManager.sol": {
+				"ast": {
+					"absolutePath": "interfaces/IRatingManager.sol",
+					"exportedSymbols": {
+						"IRatingManager": [
+							63
+						],
+						"Structs": [
+							153
+						]
+					},
+					"id": 64,
+					"license": "MIT",
+					"nodeType": "SourceUnit",
+					"nodes": [
+						{
+							"id": 1,
+							"literals": [
+								"solidity",
+								"^",
+								"0.8",
+								".24"
+							],
+							"nodeType": "PragmaDirective",
+							"src": "33:24:0"
+						},
+						{
+							"absolutePath": "types/Structs.sol",
+							"file": "../types/Structs.sol",
+							"id": 2,
+							"nameLocation": "-1:-1:-1",
+							"nodeType": "ImportDirective",
+							"scope": 64,
+							"sourceUnit": 154,
+							"src": "61:30:0",
+							"symbolAliases": [],
+							"unitAlias": ""
+						},
+						{
+							"abstract": false,
+							"baseContracts": [],
+							"canonicalName": "IRatingManager",
+							"contractDependencies": [],
+							"contractKind": "interface",
+							"fullyImplemented": false,
+							"id": 63,
+							"linearizedBaseContracts": [
+								63
+							],
+							"name": "IRatingManager",
+							"nameLocation": "105:14:0",
+							"nodeType": "ContractDefinition",
+							"nodes": [
+								{
+									"anonymous": false,
+									"eventSelector": "1711e3e66efa00ed25f58ffe8e0d8b7c1b29c2cbea7d708710a5a467ef74d21f",
+									"id": 14,
+									"name": "EmployeeRated",
+									"nameLocation": "133:13:0",
+									"nodeType": "EventDefinition",
+									"parameters": {
+										"id": 13,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 4,
+												"indexed": true,
+												"mutability": "mutable",
+												"name": "employee",
+												"nameLocation": "163:8:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 14,
+												"src": "147:24:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 3,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "147:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 6,
+												"indexed": true,
+												"mutability": "mutable",
+												"name": "customer",
+												"nameLocation": "189:8:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 14,
+												"src": "173:24:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 5,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "173:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 8,
+												"indexed": false,
+												"mutability": "mutable",
+												"name": "restaurantId",
+												"nameLocation": "207:12:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 14,
+												"src": "199:20:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												},
+												"typeName": {
+													"id": 7,
+													"name": "uint128",
+													"nodeType": "ElementaryTypeName",
+													"src": "199:7:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_uint128",
+														"typeString": "uint128"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 10,
+												"indexed": false,
+												"mutability": "mutable",
+												"name": "rating",
+												"nameLocation": "227:6:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 14,
+												"src": "221:12:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint8",
+													"typeString": "uint8"
+												},
+												"typeName": {
+													"id": 9,
+													"name": "uint8",
+													"nodeType": "ElementaryTypeName",
+													"src": "221:5:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_uint8",
+														"typeString": "uint8"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 12,
+												"indexed": false,
+												"mutability": "mutable",
+												"name": "comment",
+												"nameLocation": "242:7:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 14,
+												"src": "235:14:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_string_memory_ptr",
+													"typeString": "string"
+												},
+												"typeName": {
+													"id": 11,
+													"name": "string",
+													"nodeType": "ElementaryTypeName",
+													"src": "235:6:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_string_storage_ptr",
+														"typeString": "string"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "146:104:0"
+									},
+									"src": "127:124:0"
+								},
+								{
+									"anonymous": false,
+									"eventSelector": "8da348b329ec9cb5f933f377db6d8d5e57e2d8c1f3ba6f02ca2b1f147120da6a",
+									"id": 24,
+									"name": "RestaurantRated",
+									"nameLocation": "263:15:0",
+									"nodeType": "EventDefinition",
+									"parameters": {
+										"id": 23,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 16,
+												"indexed": true,
+												"mutability": "mutable",
+												"name": "restaurantId",
+												"nameLocation": "295:12:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 24,
+												"src": "279:28:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												},
+												"typeName": {
+													"id": 15,
+													"name": "uint128",
+													"nodeType": "ElementaryTypeName",
+													"src": "279:7:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_uint128",
+														"typeString": "uint128"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 18,
+												"indexed": true,
+												"mutability": "mutable",
+												"name": "customer",
+												"nameLocation": "325:8:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 24,
+												"src": "309:24:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 17,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "309:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 20,
+												"indexed": false,
+												"mutability": "mutable",
+												"name": "rating",
+												"nameLocation": "341:6:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 24,
+												"src": "335:12:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint8",
+													"typeString": "uint8"
+												},
+												"typeName": {
+													"id": 19,
+													"name": "uint8",
+													"nodeType": "ElementaryTypeName",
+													"src": "335:5:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_uint8",
+														"typeString": "uint8"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 22,
+												"indexed": false,
+												"mutability": "mutable",
+												"name": "comment",
+												"nameLocation": "356:7:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 24,
+												"src": "349:14:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_string_memory_ptr",
+													"typeString": "string"
+												},
+												"typeName": {
+													"id": 21,
+													"name": "string",
+													"nodeType": "ElementaryTypeName",
+													"src": "349:6:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_string_storage_ptr",
+														"typeString": "string"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "278:86:0"
+									},
+									"src": "257:108:0"
+								},
+								{
+									"functionSelector": "49392b3d",
+									"id": 35,
+									"implemented": false,
+									"kind": "function",
+									"modifiers": [],
+									"name": "rateEmployee",
+									"nameLocation": "382:12:0",
+									"nodeType": "FunctionDefinition",
+									"parameters": {
+										"id": 33,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 26,
+												"mutability": "mutable",
+												"name": "employee",
+												"nameLocation": "403:8:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 35,
+												"src": "395:16:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 25,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "395:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 28,
+												"mutability": "mutable",
+												"name": "restaurantId",
+												"nameLocation": "421:12:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 35,
+												"src": "413:20:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												},
+												"typeName": {
+													"id": 27,
+													"name": "uint128",
+													"nodeType": "ElementaryTypeName",
+													"src": "413:7:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_uint128",
+														"typeString": "uint128"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 30,
+												"mutability": "mutable",
+												"name": "rating",
+												"nameLocation": "441:6:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 35,
+												"src": "435:12:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint8",
+													"typeString": "uint8"
+												},
+												"typeName": {
+													"id": 29,
+													"name": "uint8",
+													"nodeType": "ElementaryTypeName",
+													"src": "435:5:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_uint8",
+														"typeString": "uint8"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 32,
+												"mutability": "mutable",
+												"name": "comment",
+												"nameLocation": "463:7:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 35,
+												"src": "449:21:0",
+												"stateVariable": false,
+												"storageLocation": "memory",
+												"typeDescriptions": {
+													"typeIdentifier": "t_string_memory_ptr",
+													"typeString": "string"
+												},
+												"typeName": {
+													"id": 31,
+													"name": "string",
+													"nodeType": "ElementaryTypeName",
+													"src": "449:6:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_string_storage_ptr",
+														"typeString": "string"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "394:77:0"
+									},
+									"returnParameters": {
+										"id": 34,
+										"nodeType": "ParameterList",
+										"parameters": [],
+										"src": "480:0:0"
+									},
+									"scope": 63,
+									"src": "373:108:0",
+									"stateMutability": "nonpayable",
+									"virtual": false,
+									"visibility": "external"
+								},
+								{
+									"functionSelector": "515f72ce",
+									"id": 44,
+									"implemented": false,
+									"kind": "function",
+									"modifiers": [],
+									"name": "rateRestaurant",
+									"nameLocation": "496:14:0",
+									"nodeType": "FunctionDefinition",
+									"parameters": {
+										"id": 42,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 37,
+												"mutability": "mutable",
+												"name": "restaurantId",
+												"nameLocation": "519:12:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 44,
+												"src": "511:20:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												},
+												"typeName": {
+													"id": 36,
+													"name": "uint128",
+													"nodeType": "ElementaryTypeName",
+													"src": "511:7:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_uint128",
+														"typeString": "uint128"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 39,
+												"mutability": "mutable",
+												"name": "rating",
+												"nameLocation": "539:6:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 44,
+												"src": "533:12:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint8",
+													"typeString": "uint8"
+												},
+												"typeName": {
+													"id": 38,
+													"name": "uint8",
+													"nodeType": "ElementaryTypeName",
+													"src": "533:5:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_uint8",
+														"typeString": "uint8"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 41,
+												"mutability": "mutable",
+												"name": "comment",
+												"nameLocation": "561:7:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 44,
+												"src": "547:21:0",
+												"stateVariable": false,
+												"storageLocation": "memory",
+												"typeDescriptions": {
+													"typeIdentifier": "t_string_memory_ptr",
+													"typeString": "string"
+												},
+												"typeName": {
+													"id": 40,
+													"name": "string",
+													"nodeType": "ElementaryTypeName",
+													"src": "547:6:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_string_storage_ptr",
+														"typeString": "string"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "510:59:0"
+									},
+									"returnParameters": {
+										"id": 43,
+										"nodeType": "ParameterList",
+										"parameters": [],
+										"src": "578:0:0"
+									},
+									"scope": 63,
+									"src": "487:92:0",
+									"stateMutability": "nonpayable",
+									"virtual": false,
+									"visibility": "external"
+								},
+								{
+									"functionSelector": "90a815a9",
+									"id": 53,
+									"implemented": false,
+									"kind": "function",
+									"modifiers": [],
+									"name": "getEmployeeRatings",
+									"nameLocation": "594:18:0",
+									"nodeType": "FunctionDefinition",
+									"parameters": {
+										"id": 47,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 46,
+												"mutability": "mutable",
+												"name": "employee",
+												"nameLocation": "621:8:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 53,
+												"src": "613:16:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 45,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "613:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "612:18:0"
+									},
+									"returnParameters": {
+										"id": 52,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 51,
+												"mutability": "mutable",
+												"name": "",
+												"nameLocation": "-1:-1:-1",
+												"nodeType": "VariableDeclaration",
+												"scope": 53,
+												"src": "654:34:0",
+												"stateVariable": false,
+												"storageLocation": "memory",
+												"typeDescriptions": {
+													"typeIdentifier": "t_array$_t_struct$_RatingForEmployee_$141_memory_ptr_$dyn_memory_ptr",
+													"typeString": "struct Structs.RatingForEmployee[]"
+												},
+												"typeName": {
+													"baseType": {
+														"id": 49,
+														"nodeType": "UserDefinedTypeName",
+														"pathNode": {
+															"id": 48,
+															"name": "Structs.RatingForEmployee",
+															"nameLocations": [
+																"654:7:0",
+																"662:17:0"
+															],
+															"nodeType": "IdentifierPath",
+															"referencedDeclaration": 141,
+															"src": "654:25:0"
+														},
+														"referencedDeclaration": 141,
+														"src": "654:25:0",
+														"typeDescriptions": {
+															"typeIdentifier": "t_struct$_RatingForEmployee_$141_storage_ptr",
+															"typeString": "struct Structs.RatingForEmployee"
+														}
+													},
+													"id": 50,
+													"nodeType": "ArrayTypeName",
+													"src": "654:27:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_array$_t_struct$_RatingForEmployee_$141_storage_$dyn_storage_ptr",
+														"typeString": "struct Structs.RatingForEmployee[]"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "653:36:0"
+									},
+									"scope": 63,
+									"src": "585:105:0",
+									"stateMutability": "view",
+									"virtual": false,
+									"visibility": "external"
+								},
+								{
+									"functionSelector": "6e1f4b75",
+									"id": 62,
+									"implemented": false,
+									"kind": "function",
+									"modifiers": [],
+									"name": "getRestaurantRatings",
+									"nameLocation": "705:20:0",
+									"nodeType": "FunctionDefinition",
+									"parameters": {
+										"id": 56,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 55,
+												"mutability": "mutable",
+												"name": "restaurantId",
+												"nameLocation": "734:12:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 62,
+												"src": "726:20:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												},
+												"typeName": {
+													"id": 54,
+													"name": "uint128",
+													"nodeType": "ElementaryTypeName",
+													"src": "726:7:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_uint128",
+														"typeString": "uint128"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "725:22:0"
+									},
+									"returnParameters": {
+										"id": 61,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 60,
+												"mutability": "mutable",
+												"name": "",
+												"nameLocation": "-1:-1:-1",
+												"nodeType": "VariableDeclaration",
+												"scope": 62,
+												"src": "771:36:0",
+												"stateVariable": false,
+												"storageLocation": "memory",
+												"typeDescriptions": {
+													"typeIdentifier": "t_array$_t_struct$_RatingForRestaurant_$152_memory_ptr_$dyn_memory_ptr",
+													"typeString": "struct Structs.RatingForRestaurant[]"
+												},
+												"typeName": {
+													"baseType": {
+														"id": 58,
+														"nodeType": "UserDefinedTypeName",
+														"pathNode": {
+															"id": 57,
+															"name": "Structs.RatingForRestaurant",
+															"nameLocations": [
+																"771:7:0",
+																"779:19:0"
+															],
+															"nodeType": "IdentifierPath",
+															"referencedDeclaration": 152,
+															"src": "771:27:0"
+														},
+														"referencedDeclaration": 152,
+														"src": "771:27:0",
+														"typeDescriptions": {
+															"typeIdentifier": "t_struct$_RatingForRestaurant_$152_storage_ptr",
+															"typeString": "struct Structs.RatingForRestaurant"
+														}
+													},
+													"id": 59,
+													"nodeType": "ArrayTypeName",
+													"src": "771:29:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_array$_t_struct$_RatingForRestaurant_$152_storage_$dyn_storage_ptr",
+														"typeString": "struct Structs.RatingForRestaurant[]"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "770:38:0"
+									},
+									"scope": 63,
+									"src": "696:113:0",
+									"stateMutability": "view",
+									"virtual": false,
+									"visibility": "external"
+								}
+							],
+							"scope": 64,
+							"src": "95:717:0",
+							"usedErrors": [],
+							"usedEvents": [
+								14,
+								24
+							]
+						}
+					],
+					"src": "33:779:0"
+				},
+				"id": 0
+			},
+			"types/Structs.sol": {
+				"ast": {
+					"absolutePath": "types/Structs.sol",
+					"exportedSymbols": {
+						"Structs": [
+							153
+						]
+					},
+					"id": 154,
+					"license": "MIT",
+					"nodeType": "SourceUnit",
+					"nodes": [
+						{
+							"id": 65,
+							"literals": [
+								"solidity",
+								"^",
+								"0.8",
+								".24"
+							],
+							"nodeType": "PragmaDirective",
+							"src": "33:24:1"
+						},
+						{
+							"abstract": false,
+							"baseContracts": [],
+							"canonicalName": "Structs",
+							"contractDependencies": [],
+							"contractKind": "contract",
+							"fullyImplemented": true,
+							"id": 153,
+							"linearizedBaseContracts": [
+								153
+							],
+							"name": "Structs",
+							"nameLocation": "70:7:1",
+							"nodeType": "ContractDefinition",
+							"nodes": [
+								{
+									"canonicalName": "Structs.Role",
+									"id": 69,
+									"members": [
+										{
+											"id": 66,
+											"name": "Customer",
+											"nameLocation": "97:8:1",
+											"nodeType": "EnumValue",
+											"src": "97:8:1"
+										},
+										{
+											"id": 67,
+											"name": "Staff",
+											"nameLocation": "107:5:1",
+											"nodeType": "EnumValue",
+											"src": "107:5:1"
+										},
+										{
+											"id": 68,
+											"name": "Admin",
+											"nameLocation": "114:5:1",
+											"nodeType": "EnumValue",
+											"src": "114:5:1"
+										}
+									],
+									"name": "Role",
+									"nameLocation": "90:4:1",
+									"nodeType": "EnumDefinition",
+									"src": "85:36:1"
+								},
+								{
+									"canonicalName": "Structs.OrderStatus",
+									"id": 76,
+									"members": [
+										{
+											"id": 70,
+											"name": "Placed",
+											"nameLocation": "146:6:1",
+											"nodeType": "EnumValue",
+											"src": "146:6:1"
+										},
+										{
+											"id": 71,
+											"name": "Confirmed",
+											"nameLocation": "154:9:1",
+											"nodeType": "EnumValue",
+											"src": "154:9:1"
+										},
+										{
+											"id": 72,
+											"name": "Preparing",
+											"nameLocation": "165:9:1",
+											"nodeType": "EnumValue",
+											"src": "165:9:1"
+										},
+										{
+											"id": 73,
+											"name": "Ready",
+											"nameLocation": "176:5:1",
+											"nodeType": "EnumValue",
+											"src": "176:5:1"
+										},
+										{
+											"id": 74,
+											"name": "Cancelled",
+											"nameLocation": "183:9:1",
+											"nodeType": "EnumValue",
+											"src": "183:9:1"
+										},
+										{
+											"id": 75,
+											"name": "Completed",
+											"nameLocation": "194:9:1",
+											"nodeType": "EnumValue",
+											"src": "194:9:1"
+										}
+									],
+									"name": "OrderStatus",
+									"nameLocation": "132:11:1",
+									"nodeType": "EnumDefinition",
+									"src": "127:78:1"
+								},
+								{
+									"canonicalName": "Structs.MenuItem",
+									"id": 99,
+									"members": [
+										{
+											"constant": false,
+											"id": 78,
+											"mutability": "mutable",
+											"name": "id",
+											"nameLocation": "248:2:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 99,
+											"src": "240:10:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 77,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "240:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 80,
+											"mutability": "mutable",
+											"name": "restaurantId",
+											"nameLocation": "269:12:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 99,
+											"src": "261:20:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 79,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "261:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 82,
+											"mutability": "mutable",
+											"name": "name",
+											"nameLocation": "299:4:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 99,
+											"src": "292:11:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_string_storage_ptr",
+												"typeString": "string"
+											},
+											"typeName": {
+												"id": 81,
+												"name": "string",
+												"nodeType": "ElementaryTypeName",
+												"src": "292:6:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_string_storage_ptr",
+													"typeString": "string"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 84,
+											"mutability": "mutable",
+											"name": "imageUrl",
+											"nameLocation": "321:8:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 99,
+											"src": "314:15:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_string_storage_ptr",
+												"typeString": "string"
+											},
+											"typeName": {
+												"id": 83,
+												"name": "string",
+												"nodeType": "ElementaryTypeName",
+												"src": "314:6:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_string_storage_ptr",
+													"typeString": "string"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 86,
+											"mutability": "mutable",
+											"name": "videoUrl",
+											"nameLocation": "347:8:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 99,
+											"src": "340:15:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_string_storage_ptr",
+												"typeString": "string"
+											},
+											"typeName": {
+												"id": 85,
+												"name": "string",
+												"nodeType": "ElementaryTypeName",
+												"src": "340:6:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_string_storage_ptr",
+													"typeString": "string"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 88,
+											"mutability": "mutable",
+											"name": "price",
+											"nameLocation": "374:5:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 99,
+											"src": "366:13:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 87,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "366:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 90,
+											"mutability": "mutable",
+											"name": "available",
+											"nameLocation": "395:9:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 99,
+											"src": "390:14:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_bool",
+												"typeString": "bool"
+											},
+											"typeName": {
+												"id": 89,
+												"name": "bool",
+												"nodeType": "ElementaryTypeName",
+												"src": "390:4:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bool",
+													"typeString": "bool"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 92,
+											"mutability": "mutable",
+											"name": "description",
+											"nameLocation": "422:11:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 99,
+											"src": "415:18:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_string_storage_ptr",
+												"typeString": "string"
+											},
+											"typeName": {
+												"id": 91,
+												"name": "string",
+												"nodeType": "ElementaryTypeName",
+												"src": "415:6:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_string_storage_ptr",
+													"typeString": "string"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 94,
+											"mutability": "mutable",
+											"name": "category",
+											"nameLocation": "451:8:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 99,
+											"src": "444:15:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_string_storage_ptr",
+												"typeString": "string"
+											},
+											"typeName": {
+												"id": 93,
+												"name": "string",
+												"nodeType": "ElementaryTypeName",
+												"src": "444:6:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_string_storage_ptr",
+													"typeString": "string"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 96,
+											"mutability": "mutable",
+											"name": "totalRating",
+											"nameLocation": "478:11:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 99,
+											"src": "470:19:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 95,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "470:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 98,
+											"mutability": "mutable",
+											"name": "ratingCount",
+											"nameLocation": "508:11:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 99,
+											"src": "500:19:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 97,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "500:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										}
+									],
+									"name": "MenuItem",
+									"nameLocation": "220:8:1",
+									"nodeType": "StructDefinition",
+									"scope": 153,
+									"src": "213:314:1",
+									"visibility": "public"
+								},
+								{
+									"canonicalName": "Structs.Order",
+									"id": 119,
+									"members": [
+										{
+											"constant": false,
+											"id": 101,
+											"mutability": "mutable",
+											"name": "id",
+											"nameLocation": "567:2:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 119,
+											"src": "559:10:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 100,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "559:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 103,
+											"mutability": "mutable",
+											"name": "customer",
+											"nameLocation": "588:8:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 119,
+											"src": "580:16:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											},
+											"typeName": {
+												"id": 102,
+												"name": "address",
+												"nodeType": "ElementaryTypeName",
+												"src": "580:7:1",
+												"stateMutability": "nonpayable",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 105,
+											"mutability": "mutable",
+											"name": "restaurantId",
+											"nameLocation": "615:12:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 119,
+											"src": "607:20:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 104,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "607:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 108,
+											"mutability": "mutable",
+											"name": "itemIds",
+											"nameLocation": "648:7:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 119,
+											"src": "638:17:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_array$_t_uint128_$dyn_storage_ptr",
+												"typeString": "uint128[]"
+											},
+											"typeName": {
+												"baseType": {
+													"id": 106,
+													"name": "uint128",
+													"nodeType": "ElementaryTypeName",
+													"src": "638:7:1",
+													"typeDescriptions": {
+														"typeIdentifier": "t_uint128",
+														"typeString": "uint128"
+													}
+												},
+												"id": 107,
+												"nodeType": "ArrayTypeName",
+												"src": "638:9:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_array$_t_uint128_$dyn_storage_ptr",
+													"typeString": "uint128[]"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 111,
+											"mutability": "mutable",
+											"name": "quantities",
+											"nameLocation": "676:10:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 119,
+											"src": "666:20:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_array$_t_uint128_$dyn_storage_ptr",
+												"typeString": "uint128[]"
+											},
+											"typeName": {
+												"baseType": {
+													"id": 109,
+													"name": "uint128",
+													"nodeType": "ElementaryTypeName",
+													"src": "666:7:1",
+													"typeDescriptions": {
+														"typeIdentifier": "t_uint128",
+														"typeString": "uint128"
+													}
+												},
+												"id": 110,
+												"nodeType": "ArrayTypeName",
+												"src": "666:9:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_array$_t_uint128_$dyn_storage_ptr",
+													"typeString": "uint128[]"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 113,
+											"mutability": "mutable",
+											"name": "totalPrice",
+											"nameLocation": "705:10:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 119,
+											"src": "697:18:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 112,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "697:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 116,
+											"mutability": "mutable",
+											"name": "status",
+											"nameLocation": "738:6:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 119,
+											"src": "726:18:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_enum$_OrderStatus_$76",
+												"typeString": "enum Structs.OrderStatus"
+											},
+											"typeName": {
+												"id": 115,
+												"nodeType": "UserDefinedTypeName",
+												"pathNode": {
+													"id": 114,
+													"name": "OrderStatus",
+													"nameLocations": [
+														"726:11:1"
+													],
+													"nodeType": "IdentifierPath",
+													"referencedDeclaration": 76,
+													"src": "726:11:1"
+												},
+												"referencedDeclaration": 76,
+												"src": "726:11:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_enum$_OrderStatus_$76",
+													"typeString": "enum Structs.OrderStatus"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 118,
+											"mutability": "mutable",
+											"name": "timestamp",
+											"nameLocation": "763:9:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 119,
+											"src": "755:17:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 117,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "755:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										}
+									],
+									"name": "Order",
+									"nameLocation": "542:5:1",
+									"nodeType": "StructDefinition",
+									"scope": 153,
+									"src": "535:245:1",
+									"visibility": "public"
+								},
+								{
+									"canonicalName": "Structs.OrderDetail",
+									"id": 128,
+									"members": [
+										{
+											"constant": false,
+											"id": 121,
+											"mutability": "mutable",
+											"name": "menuId",
+											"nameLocation": "826:6:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 128,
+											"src": "818:14:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 120,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "818:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 123,
+											"mutability": "mutable",
+											"name": "quantity",
+											"nameLocation": "851:8:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 128,
+											"src": "843:16:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 122,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "843:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 125,
+											"mutability": "mutable",
+											"name": "price",
+											"nameLocation": "878:5:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 128,
+											"src": "870:13:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 124,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "870:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 127,
+											"mutability": "mutable",
+											"name": "name",
+											"nameLocation": "901:4:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 128,
+											"src": "894:11:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_string_storage_ptr",
+												"typeString": "string"
+											},
+											"typeName": {
+												"id": 126,
+												"name": "string",
+												"nodeType": "ElementaryTypeName",
+												"src": "894:6:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_string_storage_ptr",
+													"typeString": "string"
+												}
+											},
+											"visibility": "internal"
+										}
+									],
+									"name": "OrderDetail",
+									"nameLocation": "795:11:1",
+									"nodeType": "StructDefinition",
+									"scope": 153,
+									"src": "788:125:1",
+									"visibility": "public"
+								},
+								{
+									"canonicalName": "Structs.RatingForEmployee",
+									"id": 141,
+									"members": [
+										{
+											"constant": false,
+											"id": 130,
+											"mutability": "mutable",
+											"name": "customer",
+											"nameLocation": "965:8:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 141,
+											"src": "957:16:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											},
+											"typeName": {
+												"id": 129,
+												"name": "address",
+												"nodeType": "ElementaryTypeName",
+												"src": "957:7:1",
+												"stateMutability": "nonpayable",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 132,
+											"mutability": "mutable",
+											"name": "employee",
+											"nameLocation": "992:8:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 141,
+											"src": "984:16:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											},
+											"typeName": {
+												"id": 131,
+												"name": "address",
+												"nodeType": "ElementaryTypeName",
+												"src": "984:7:1",
+												"stateMutability": "nonpayable",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 134,
+											"mutability": "mutable",
+											"name": "restaurantId",
+											"nameLocation": "1019:12:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 141,
+											"src": "1011:20:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 133,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "1011:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 136,
+											"mutability": "mutable",
+											"name": "rating",
+											"nameLocation": "1048:6:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 141,
+											"src": "1042:12:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint8",
+												"typeString": "uint8"
+											},
+											"typeName": {
+												"id": 135,
+												"name": "uint8",
+												"nodeType": "ElementaryTypeName",
+												"src": "1042:5:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint8",
+													"typeString": "uint8"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 138,
+											"mutability": "mutable",
+											"name": "comment",
+											"nameLocation": "1072:7:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 141,
+											"src": "1065:14:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_string_storage_ptr",
+												"typeString": "string"
+											},
+											"typeName": {
+												"id": 137,
+												"name": "string",
+												"nodeType": "ElementaryTypeName",
+												"src": "1065:6:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_string_storage_ptr",
+													"typeString": "string"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 140,
+											"mutability": "mutable",
+											"name": "timestamp",
+											"nameLocation": "1098:9:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 141,
+											"src": "1090:17:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 139,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "1090:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										}
+									],
+									"name": "RatingForEmployee",
+									"nameLocation": "928:17:1",
+									"nodeType": "StructDefinition",
+									"scope": 153,
+									"src": "921:194:1",
+									"visibility": "public"
+								},
+								{
+									"canonicalName": "Structs.RatingForRestaurant",
+									"id": 152,
+									"members": [
+										{
+											"constant": false,
+											"id": 143,
+											"mutability": "mutable",
+											"name": "customer",
+											"nameLocation": "1169:8:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 152,
+											"src": "1161:16:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_address",
+												"typeString": "address"
+											},
+											"typeName": {
+												"id": 142,
+												"name": "address",
+												"nodeType": "ElementaryTypeName",
+												"src": "1161:7:1",
+												"stateMutability": "nonpayable",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 145,
+											"mutability": "mutable",
+											"name": "restaurantId",
+											"nameLocation": "1196:12:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 152,
+											"src": "1188:20:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 144,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "1188:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 147,
+											"mutability": "mutable",
+											"name": "rating",
+											"nameLocation": "1225:6:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 152,
+											"src": "1219:12:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint8",
+												"typeString": "uint8"
+											},
+											"typeName": {
+												"id": 146,
+												"name": "uint8",
+												"nodeType": "ElementaryTypeName",
+												"src": "1219:5:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint8",
+													"typeString": "uint8"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 149,
+											"mutability": "mutable",
+											"name": "comment",
+											"nameLocation": "1249:7:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 152,
+											"src": "1242:14:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_string_storage_ptr",
+												"typeString": "string"
+											},
+											"typeName": {
+												"id": 148,
+												"name": "string",
+												"nodeType": "ElementaryTypeName",
+												"src": "1242:6:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_string_storage_ptr",
+													"typeString": "string"
+												}
+											},
+											"visibility": "internal"
+										},
+										{
+											"constant": false,
+											"id": 151,
+											"mutability": "mutable",
+											"name": "timestamp",
+											"nameLocation": "1275:9:1",
+											"nodeType": "VariableDeclaration",
+											"scope": 152,
+											"src": "1267:17:1",
+											"stateVariable": false,
+											"storageLocation": "default",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											},
+											"typeName": {
+												"id": 150,
+												"name": "uint128",
+												"nodeType": "ElementaryTypeName",
+												"src": "1267:7:1",
+												"typeDescriptions": {
+													"typeIdentifier": "t_uint128",
+													"typeString": "uint128"
+												}
+											},
+											"visibility": "internal"
+										}
+									],
+									"name": "RatingForRestaurant",
+									"nameLocation": "1130:19:1",
+									"nodeType": "StructDefinition",
+									"scope": 153,
+									"src": "1123:169:1",
+									"visibility": "public"
+								}
+							],
+							"scope": 154,
+							"src": "61:1234:1",
+							"usedErrors": [],
+							"usedEvents": []
+						}
+					],
+					"src": "33:1262:1"
+				},
+				"id": 1
+			}
+		}
+	}
+}

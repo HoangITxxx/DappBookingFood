@@ -1,0 +1,192 @@
+{
+	"deploy": {
+		"VM:-": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"main:1": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"ropsten:3": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"rinkeby:4": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"kovan:42": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"goerli:5": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		},
+		"Custom": {
+			"linkReferences": {},
+			"autoDeployLib": true
+		}
+	},
+	"data": {
+		"bytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"deployedBytecode": {
+			"functionDebugData": {},
+			"generatedSources": [],
+			"immutableReferences": {},
+			"linkReferences": {},
+			"object": "",
+			"opcodes": "",
+			"sourceMap": ""
+		},
+		"gasEstimates": null,
+		"methodIdentifiers": {
+			"assignStaff(address,uint128)": "ae9a4655",
+			"registerRestaurant()": "fa20fca7",
+			"setServiceFeePercentage(uint8)": "f7937282"
+		}
+	},
+	"abi": [
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "recipient",
+					"type": "address"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint128",
+					"name": "amount",
+					"type": "uint128"
+				}
+			],
+			"name": "PaymentReleased",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "uint128",
+					"name": "restaurantId",
+					"type": "uint128"
+				},
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "owner",
+					"type": "address"
+				}
+			],
+			"name": "RestaurantRegistered",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "user",
+					"type": "address"
+				},
+				{
+					"indexed": false,
+					"internalType": "enum Structs.Role",
+					"name": "role",
+					"type": "uint8"
+				}
+			],
+			"name": "RoleAssigned",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "uint8",
+					"name": "newPercentage",
+					"type": "uint8"
+				}
+			],
+			"name": "ServiceFeeUpdated",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"internalType": "address",
+					"name": "staff",
+					"type": "address"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint128",
+					"name": "restaurantId",
+					"type": "uint128"
+				}
+			],
+			"name": "StaffAssigned",
+			"type": "event"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "staff",
+					"type": "address"
+				},
+				{
+					"internalType": "uint128",
+					"name": "restaurantId",
+					"type": "uint128"
+				}
+			],
+			"name": "assignStaff",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "registerRestaurant",
+			"outputs": [
+				{
+					"internalType": "uint128",
+					"name": "",
+					"type": "uint128"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint8",
+					"name": "percentage",
+					"type": "uint8"
+				}
+			],
+			"name": "setServiceFeePercentage",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		}
+	]
+}

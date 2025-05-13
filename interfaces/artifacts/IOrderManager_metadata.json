@@ -1,0 +1,471 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint128",
+						"name": "id",
+						"type": "uint128"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "customer",
+						"type": "address"
+					}
+				],
+				"name": "OrderCancelled",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint128",
+						"name": "orderId",
+						"type": "uint128"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "customer",
+						"type": "address"
+					}
+				],
+				"name": "OrderCompleted",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint128",
+						"name": "id",
+						"type": "uint128"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "customer",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint128",
+						"name": "totalPrice",
+						"type": "uint128"
+					}
+				],
+				"name": "OrderPlaced",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "uint128",
+						"name": "id",
+						"type": "uint128"
+					},
+					{
+						"indexed": false,
+						"internalType": "enum Structs.OrderStatus",
+						"name": "status",
+						"type": "uint8"
+					}
+				],
+				"name": "OrderStatusUpdated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "customer",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint128",
+						"name": "totalPrice",
+						"type": "uint128"
+					}
+				],
+				"name": "RefundProcessed",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "orderId",
+						"type": "uint128"
+					}
+				],
+				"name": "cancelOrder",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "orderId",
+						"type": "uint128"
+					}
+				],
+				"name": "completeOrder",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "start",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128",
+						"name": "limit",
+						"type": "uint128"
+					}
+				],
+				"name": "getAllOrders",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint128",
+								"name": "id",
+								"type": "uint128"
+							},
+							{
+								"internalType": "address",
+								"name": "customer",
+								"type": "address"
+							},
+							{
+								"internalType": "uint128",
+								"name": "restaurantId",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128[]",
+								"name": "itemIds",
+								"type": "uint128[]"
+							},
+							{
+								"internalType": "uint128[]",
+								"name": "quantities",
+								"type": "uint128[]"
+							},
+							{
+								"internalType": "uint128",
+								"name": "totalPrice",
+								"type": "uint128"
+							},
+							{
+								"internalType": "enum Structs.OrderStatus",
+								"name": "status",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint128",
+								"name": "timestamp",
+								"type": "uint128"
+							}
+						],
+						"internalType": "struct Structs.Order[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getMyOrders",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint128",
+								"name": "id",
+								"type": "uint128"
+							},
+							{
+								"internalType": "address",
+								"name": "customer",
+								"type": "address"
+							},
+							{
+								"internalType": "uint128",
+								"name": "restaurantId",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128[]",
+								"name": "itemIds",
+								"type": "uint128[]"
+							},
+							{
+								"internalType": "uint128[]",
+								"name": "quantities",
+								"type": "uint128[]"
+							},
+							{
+								"internalType": "uint128",
+								"name": "totalPrice",
+								"type": "uint128"
+							},
+							{
+								"internalType": "enum Structs.OrderStatus",
+								"name": "status",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint128",
+								"name": "timestamp",
+								"type": "uint128"
+							}
+						],
+						"internalType": "struct Structs.Order[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "orderId",
+						"type": "uint128"
+					}
+				],
+				"name": "getOrderDetails",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "uint128",
+								"name": "id",
+								"type": "uint128"
+							},
+							{
+								"internalType": "address",
+								"name": "customer",
+								"type": "address"
+							},
+							{
+								"internalType": "uint128",
+								"name": "restaurantId",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128[]",
+								"name": "itemIds",
+								"type": "uint128[]"
+							},
+							{
+								"internalType": "uint128[]",
+								"name": "quantities",
+								"type": "uint128[]"
+							},
+							{
+								"internalType": "uint128",
+								"name": "totalPrice",
+								"type": "uint128"
+							},
+							{
+								"internalType": "enum Structs.OrderStatus",
+								"name": "status",
+								"type": "uint8"
+							},
+							{
+								"internalType": "uint128",
+								"name": "timestamp",
+								"type": "uint128"
+							}
+						],
+						"internalType": "struct Structs.Order",
+						"name": "order",
+						"type": "tuple"
+					},
+					{
+						"components": [
+							{
+								"internalType": "uint128",
+								"name": "id",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "restaurantId",
+								"type": "uint128"
+							},
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "imageUrl",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "videoUrl",
+								"type": "string"
+							},
+							{
+								"internalType": "uint128",
+								"name": "price",
+								"type": "uint128"
+							},
+							{
+								"internalType": "bool",
+								"name": "available",
+								"type": "bool"
+							},
+							{
+								"internalType": "string",
+								"name": "description",
+								"type": "string"
+							},
+							{
+								"internalType": "string",
+								"name": "category",
+								"type": "string"
+							},
+							{
+								"internalType": "uint128",
+								"name": "totalRating",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "ratingCount",
+								"type": "uint128"
+							}
+						],
+						"internalType": "struct Structs.MenuItem[]",
+						"name": "items",
+						"type": "tuple[]"
+					},
+					{
+						"internalType": "uint128[]",
+						"name": "quantities",
+						"type": "uint128[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "restaurantId",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint128[]",
+						"name": "itemIds",
+						"type": "uint128[]"
+					},
+					{
+						"internalType": "uint128[]",
+						"name": "quantities",
+						"type": "uint128[]"
+					}
+				],
+				"name": "placeOrder",
+				"outputs": [],
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "orderId",
+						"type": "uint128"
+					},
+					{
+						"internalType": "enum Structs.OrderStatus",
+						"name": "status",
+						"type": "uint8"
+					}
+				],
+				"name": "updateOrderStatus",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"interfaces/IOrderManager.sol": "IOrderManager"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 0
+		},
+		"remappings": []
+	},
+	"sources": {
+		"interfaces/IOrderManager.sol": {
+			"keccak256": "0xc6f42ed55e62d5005382a10238d57abf6170804ad2fe0cbff5984a4b625640e7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a7152cdd979087f4748046621636fc0c5b6863fbc3795f9701406c13096f5b90",
+				"dweb:/ipfs/QmUKZg6R1eSL3bg8TowS34s9C7ANrQzfeHTJUp3chJjSF9"
+			]
+		},
+		"types/Structs.sol": {
+			"keccak256": "0x413f0168cb488bdb09610b6ecfe14de1bbb4aeb35afa24d133a50bdcb7d7ea4d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://bce49ef8e4680650022b70f9038cc2ca8f31d887458dc063110c1e6d18a0338c",
+				"dweb:/ipfs/QmP2sM6QfwLDA3q8FwzE6JLsKFP6BXyDy5g8fz94EtPoR1"
+			]
+		}
+	},
+	"version": 1
+}

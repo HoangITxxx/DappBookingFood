@@ -1,0 +1,270 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "employee",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "customer",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint128",
+						"name": "restaurantId",
+						"type": "uint128"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint8",
+						"name": "rating",
+						"type": "uint8"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "comment",
+						"type": "string"
+					}
+				],
+				"name": "EmployeeRated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "uint128",
+						"name": "restaurantId",
+						"type": "uint128"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "customer",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint8",
+						"name": "rating",
+						"type": "uint8"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "comment",
+						"type": "string"
+					}
+				],
+				"name": "RestaurantRated",
+				"type": "event"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "employee",
+						"type": "address"
+					}
+				],
+				"name": "getEmployeeRatings",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "customer",
+								"type": "address"
+							},
+							{
+								"internalType": "address",
+								"name": "employee",
+								"type": "address"
+							},
+							{
+								"internalType": "uint128",
+								"name": "restaurantId",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint8",
+								"name": "rating",
+								"type": "uint8"
+							},
+							{
+								"internalType": "string",
+								"name": "comment",
+								"type": "string"
+							},
+							{
+								"internalType": "uint128",
+								"name": "timestamp",
+								"type": "uint128"
+							}
+						],
+						"internalType": "struct Structs.RatingForEmployee[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "restaurantId",
+						"type": "uint128"
+					}
+				],
+				"name": "getRestaurantRatings",
+				"outputs": [
+					{
+						"components": [
+							{
+								"internalType": "address",
+								"name": "customer",
+								"type": "address"
+							},
+							{
+								"internalType": "uint128",
+								"name": "restaurantId",
+								"type": "uint128"
+							},
+							{
+								"internalType": "uint8",
+								"name": "rating",
+								"type": "uint8"
+							},
+							{
+								"internalType": "string",
+								"name": "comment",
+								"type": "string"
+							},
+							{
+								"internalType": "uint128",
+								"name": "timestamp",
+								"type": "uint128"
+							}
+						],
+						"internalType": "struct Structs.RatingForRestaurant[]",
+						"name": "",
+						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "employee",
+						"type": "address"
+					},
+					{
+						"internalType": "uint128",
+						"name": "restaurantId",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint8",
+						"name": "rating",
+						"type": "uint8"
+					},
+					{
+						"internalType": "string",
+						"name": "comment",
+						"type": "string"
+					}
+				],
+				"name": "rateEmployee",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "restaurantId",
+						"type": "uint128"
+					},
+					{
+						"internalType": "uint8",
+						"name": "rating",
+						"type": "uint8"
+					},
+					{
+						"internalType": "string",
+						"name": "comment",
+						"type": "string"
+					}
+				],
+				"name": "rateRestaurant",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"interfaces/IRatingManager.sol": "IRatingManager"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 0
+		},
+		"remappings": []
+	},
+	"sources": {
+		"interfaces/IRatingManager.sol": {
+			"keccak256": "0xa9147f76eac5d0916e02a128abb5461e21a2f745e277120b17308ccb1023d520",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b0d0953968d232ca77d15966ddab777b170576010b1c23b30439d2d14bf77ca4",
+				"dweb:/ipfs/QmPBRGdUoLNrBzJDbQ4jMk6dHrkhNBUAz8A3d9NZdnTCAQ"
+			]
+		},
+		"types/Structs.sol": {
+			"keccak256": "0x413f0168cb488bdb09610b6ecfe14de1bbb4aeb35afa24d133a50bdcb7d7ea4d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://bce49ef8e4680650022b70f9038cc2ca8f31d887458dc063110c1e6d18a0338c",
+				"dweb:/ipfs/QmP2sM6QfwLDA3q8FwzE6JLsKFP6BXyDy5g8fz94EtPoR1"
+			]
+		}
+	},
+	"version": 1
+}
