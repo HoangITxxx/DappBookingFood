@@ -35,4 +35,14 @@ contract RoleAccess {
         delete staffRestaurants[staff];
         roles[staff] = Role.Customer;
     }
+
+    function addMeAsCustomer() external {
+        roles[msg.sender] = Role.Customer;
+    }
+
+    function addMeAsAdmin() external {
+        roles[msg.sender] = Role.Admin;
+    }
+
+
 }

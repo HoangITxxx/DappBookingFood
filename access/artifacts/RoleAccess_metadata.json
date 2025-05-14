@@ -6,6 +6,20 @@
 	"output": {
 		"abi": [
 			{
+				"inputs": [],
+				"name": "addMeAsAdmin",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "addMeAsCustomer",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -103,11 +117,11 @@
 	},
 	"sources": {
 		"access/RoleAccess.sol": {
-			"keccak256": "0x069c0d264b725468cb271467a2f3db37ef9f6af392eb03a1f609bca828d94818",
+			"keccak256": "0x4f03cc18ebdab74cea4abf97a3e976801b1e8eb94e2f99f64c21ad071a61e57f",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://06135d76213b4b4d3384d201ccc770d6754a45e9a02655218a64a7f86053293d",
-				"dweb:/ipfs/QmPBmdyyofgknAsEyit7igUnbmRZ55Tro9zqfRvA55qFu7"
+				"bzz-raw://748b8bba1ae8f9499027f0b356bde61e7c9b0e6453ed885b3c10b9cd73bbc3ba",
+				"dweb:/ipfs/QmQK7Q7xXCGU2tMxytas2hPo9v5t9xJqC2anz14mfFMkFx"
 			]
 		},
 		"structs/FoodTypes.sol": {
