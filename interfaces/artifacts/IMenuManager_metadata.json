@@ -9,13 +9,13 @@
 				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": false,
+						"indexed": true,
 						"internalType": "uint128",
-						"name": "id",
+						"name": "menuId",
 						"type": "uint128"
 					},
 					{
-						"indexed": false,
+						"indexed": true,
 						"internalType": "uint128",
 						"name": "restaurantId",
 						"type": "uint128"
@@ -31,63 +31,6 @@
 				"type": "event"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "uint128",
-						"name": "menuId",
-						"type": "uint128"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint8",
-						"name": "rating",
-						"type": "uint8"
-					}
-				],
-				"name": "MenuItemRated",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "uint128",
-						"name": "id",
-						"type": "uint128"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint128",
-						"name": "restaurantId",
-						"type": "uint128"
-					}
-				],
-				"name": "MenuItemRemoved",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "uint128",
-						"name": "id",
-						"type": "uint128"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint128",
-						"name": "restaurantId",
-						"type": "uint128"
-					}
-				],
-				"name": "MenuItemUpdated",
-				"type": "event"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "uint128",
@@ -97,16 +40,6 @@
 					{
 						"internalType": "string",
 						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "imageUrl",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "videoUrl",
 						"type": "string"
 					},
 					{
@@ -123,6 +56,11 @@
 						"internalType": "string",
 						"name": "category",
 						"type": "string"
+					},
+					{
+						"internalType": "uint128",
+						"name": "preparationTime",
+						"type": "uint128"
 					}
 				],
 				"name": "addMenuItem",
@@ -143,36 +81,7 @@
 						"type": "uint128"
 					}
 				],
-				"name": "getAverageRating",
-				"outputs": [
-					{
-						"internalType": "uint128",
-						"name": "",
-						"type": "uint128"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint128",
-						"name": "restaurantId",
-						"type": "uint128"
-					},
-					{
-						"internalType": "uint128",
-						"name": "start",
-						"type": "uint128"
-					},
-					{
-						"internalType": "uint128",
-						"name": "limit",
-						"type": "uint128"
-					}
-				],
-				"name": "getMenuItems",
+				"name": "getMenuItem",
 				"outputs": [
 					{
 						"components": [
@@ -189,16 +98,6 @@
 							{
 								"internalType": "string",
 								"name": "name",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "imageUrl",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "videoUrl",
 								"type": "string"
 							},
 							{
@@ -230,37 +129,19 @@
 								"internalType": "uint128",
 								"name": "ratingCount",
 								"type": "uint128"
+							},
+							{
+								"internalType": "uint128",
+								"name": "preparationTime",
+								"type": "uint128"
 							}
 						],
-						"internalType": "struct Structs.MenuItem[]",
+						"internalType": "struct MenuItem",
 						"name": "",
-						"type": "tuple[]"
+						"type": "tuple"
 					}
 				],
 				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint128",
-						"name": "restaurantId",
-						"type": "uint128"
-					},
-					{
-						"internalType": "uint128",
-						"name": "menuId",
-						"type": "uint128"
-					},
-					{
-						"internalType": "uint8",
-						"name": "rating",
-						"type": "uint8"
-					}
-				],
-				"name": "rateMenuItem",
-				"outputs": [],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -296,16 +177,6 @@
 					{
 						"internalType": "string",
 						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "imageUrl",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "videoUrl",
 						"type": "string"
 					},
 					{
@@ -357,25 +228,25 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 0
+			"runs": 200
 		},
 		"remappings": []
 	},
 	"sources": {
 		"interfaces/IMenuManager.sol": {
-			"keccak256": "0x7d467b965600d7ef339d101eac7517b07f55e82fccf997bce11bdfde51d54f70",
+			"keccak256": "0xa163e5220c516c635cbd68d8f26d5fc00c3b64037178b13598abd32b30067438",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://3ba0ca502bffbfe4cc9614941eb546554b0258429824db42af9f3ba2d7db7e4d",
-				"dweb:/ipfs/QmTt4cmMkDciKfpt4BBx2AZfCu5t61xkQwR47ocd6QgMCR"
+				"bzz-raw://d02857bf89d679b19f27d113560b89e0e8a35db6e762eb79e54bfa2ee499f5b2",
+				"dweb:/ipfs/QmUWpg1VKzq68Lob7EW9GtLRRjrhyRT672W1pu7z4c8fyc"
 			]
 		},
-		"types/Structs.sol": {
-			"keccak256": "0x413f0168cb488bdb09610b6ecfe14de1bbb4aeb35afa24d133a50bdcb7d7ea4d",
+		"structs/FoodTypes.sol": {
+			"keccak256": "0x6349ed8defd63089fdb5a53685a568d3ab0ef9d63c5ca7ea733573e0bd7734d7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://bce49ef8e4680650022b70f9038cc2ca8f31d887458dc063110c1e6d18a0338c",
-				"dweb:/ipfs/QmP2sM6QfwLDA3q8FwzE6JLsKFP6BXyDy5g8fz94EtPoR1"
+				"bzz-raw://c896dd06df3864f42b2906d0a8a59799b57fbfe18094202d0494b4a198ea42b4",
+				"dweb:/ipfs/Qma59Lyc5E9p32rumk56SkEhyJHbqFV7wVJveKj7gg5h4m"
 			]
 		}
 	},

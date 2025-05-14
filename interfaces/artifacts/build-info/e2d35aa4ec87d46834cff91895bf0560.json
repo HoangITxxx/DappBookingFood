@@ -1,0 +1,2279 @@
+{
+	"id": "e2d35aa4ec87d46834cff91895bf0560",
+	"_format": "hh-sol-build-info-1",
+	"solcVersion": "0.8.30",
+	"solcLongVersion": "0.8.30+commit.73712a01",
+	"input": {
+		"language": "Solidity",
+		"sources": {
+			"interfaces/IRoleAccess.sol": {
+				"content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.24;\r\n\r\nimport \"../../structs/FoodTypes.sol\"; // Đường dẫn đến FoodTypes.sol\r\n\r\ninterface IRoleAccess {\r\n    event RoleGranted(address indexed user, Role indexed role, address indexed granter);\r\n    event RoleRevoked(address indexed user, Role indexed role, address indexed revoker);\r\n    event AdminTransferred(address indexed previousAdmin, address indexed newAdmin); // Nếu có vai trò Admin đặc biệt trong RoleAccess\r\n\r\n    // --- Functions to be called by Owner of RoleAccess or designated Admins ---\r\n    function grantRole(address userAddress, Role roleToGrant) external;\r\n    function revokeRole(address userAddress, Role roleToRevoke) external;\r\n    // function addAdmin(address newAdminAddress) external; // Nếu có nhiều Admin cho RoleAccess\r\n    // function removeAdmin(address adminAddressToRemove) external; // Nếu có nhiều Admin cho RoleAccess\r\n    // function renounceAdminRole() external; // Admin của RoleAccess từ bỏ vai trò\r\n\r\n    // --- View Functions (Called by any contract/user to check roles) ---\r\n    function getRole(address userAddress) external view returns (Role);\r\n    function hasRole(address userAddress, Role roleToCheck) external view returns (bool);\r\n    function isAdmin(address userAddress) external view returns (bool);\r\n    function isStaff(address userAddress) external view returns (bool);\r\n    function isCustomer(address userAddress) external view returns (bool);\r\n    function isRestaurantOwner(address userAddress) external view returns (bool);\r\n}"
+			},
+			"structs/FoodTypes.sol": {
+				"content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.24;\r\n\r\nenum Role { Admin, Staff, Customer }\r\nenum OrderStatus { Placed, Confirmed, Preparing, Ready, Cancelled, Completed }\r\n\r\nstruct MenuItem {\r\n    uint128 id;\r\n    uint128 restaurantId;\r\n    string name;\r\n    uint128 price;\r\n    bool available;\r\n    string description;\r\n    string category;\r\n    uint128 totalRating;\r\n    uint128 ratingCount;\r\n    uint128 preparationTime;\r\n}\r\n\r\nstruct Order {\r\n    uint128 id;\r\n    address customer;\r\n    uint128 restaurantId;\r\n    uint128[] itemIds;\r\n    uint128[] quantities;\r\n    uint128 totalPrice;\r\n    OrderStatus status;\r\n    uint128 timestamp;\r\n    uint128 preparationTime;\r\n}\r\n\r\nstruct Review {\r\n    address customer;\r\n    uint128 restaurantId;\r\n    uint8 rating;\r\n    string comment;\r\n    uint128 timestamp;\r\n}"
+			}
+		},
+		"settings": {
+			"optimizer": {
+				"enabled": true,
+				"runs": 200
+			},
+			"outputSelection": {
+				"*": {
+					"": [
+						"ast"
+					],
+					"*": [
+						"abi",
+						"metadata",
+						"devdoc",
+						"userdoc",
+						"storageLayout",
+						"evm.legacyAssembly",
+						"evm.bytecode",
+						"evm.deployedBytecode",
+						"evm.methodIdentifiers",
+						"evm.gasEstimates",
+						"evm.assembly"
+					]
+				}
+			},
+			"remappings": []
+		}
+	},
+	"output": {
+		"contracts": {
+			"interfaces/IRoleAccess.sol": {
+				"IRoleAccess": {
+					"abi": [
+						{
+							"anonymous": false,
+							"inputs": [
+								{
+									"indexed": true,
+									"internalType": "address",
+									"name": "previousAdmin",
+									"type": "address"
+								},
+								{
+									"indexed": true,
+									"internalType": "address",
+									"name": "newAdmin",
+									"type": "address"
+								}
+							],
+							"name": "AdminTransferred",
+							"type": "event"
+						},
+						{
+							"anonymous": false,
+							"inputs": [
+								{
+									"indexed": true,
+									"internalType": "address",
+									"name": "user",
+									"type": "address"
+								},
+								{
+									"indexed": true,
+									"internalType": "enum Role",
+									"name": "role",
+									"type": "uint8"
+								},
+								{
+									"indexed": true,
+									"internalType": "address",
+									"name": "granter",
+									"type": "address"
+								}
+							],
+							"name": "RoleGranted",
+							"type": "event"
+						},
+						{
+							"anonymous": false,
+							"inputs": [
+								{
+									"indexed": true,
+									"internalType": "address",
+									"name": "user",
+									"type": "address"
+								},
+								{
+									"indexed": true,
+									"internalType": "enum Role",
+									"name": "role",
+									"type": "uint8"
+								},
+								{
+									"indexed": true,
+									"internalType": "address",
+									"name": "revoker",
+									"type": "address"
+								}
+							],
+							"name": "RoleRevoked",
+							"type": "event"
+						},
+						{
+							"inputs": [
+								{
+									"internalType": "address",
+									"name": "userAddress",
+									"type": "address"
+								}
+							],
+							"name": "getRole",
+							"outputs": [
+								{
+									"internalType": "enum Role",
+									"name": "",
+									"type": "uint8"
+								}
+							],
+							"stateMutability": "view",
+							"type": "function"
+						},
+						{
+							"inputs": [
+								{
+									"internalType": "address",
+									"name": "userAddress",
+									"type": "address"
+								},
+								{
+									"internalType": "enum Role",
+									"name": "roleToGrant",
+									"type": "uint8"
+								}
+							],
+							"name": "grantRole",
+							"outputs": [],
+							"stateMutability": "nonpayable",
+							"type": "function"
+						},
+						{
+							"inputs": [
+								{
+									"internalType": "address",
+									"name": "userAddress",
+									"type": "address"
+								},
+								{
+									"internalType": "enum Role",
+									"name": "roleToCheck",
+									"type": "uint8"
+								}
+							],
+							"name": "hasRole",
+							"outputs": [
+								{
+									"internalType": "bool",
+									"name": "",
+									"type": "bool"
+								}
+							],
+							"stateMutability": "view",
+							"type": "function"
+						},
+						{
+							"inputs": [
+								{
+									"internalType": "address",
+									"name": "userAddress",
+									"type": "address"
+								}
+							],
+							"name": "isAdmin",
+							"outputs": [
+								{
+									"internalType": "bool",
+									"name": "",
+									"type": "bool"
+								}
+							],
+							"stateMutability": "view",
+							"type": "function"
+						},
+						{
+							"inputs": [
+								{
+									"internalType": "address",
+									"name": "userAddress",
+									"type": "address"
+								}
+							],
+							"name": "isCustomer",
+							"outputs": [
+								{
+									"internalType": "bool",
+									"name": "",
+									"type": "bool"
+								}
+							],
+							"stateMutability": "view",
+							"type": "function"
+						},
+						{
+							"inputs": [
+								{
+									"internalType": "address",
+									"name": "userAddress",
+									"type": "address"
+								}
+							],
+							"name": "isRestaurantOwner",
+							"outputs": [
+								{
+									"internalType": "bool",
+									"name": "",
+									"type": "bool"
+								}
+							],
+							"stateMutability": "view",
+							"type": "function"
+						},
+						{
+							"inputs": [
+								{
+									"internalType": "address",
+									"name": "userAddress",
+									"type": "address"
+								}
+							],
+							"name": "isStaff",
+							"outputs": [
+								{
+									"internalType": "bool",
+									"name": "",
+									"type": "bool"
+								}
+							],
+							"stateMutability": "view",
+							"type": "function"
+						},
+						{
+							"inputs": [
+								{
+									"internalType": "address",
+									"name": "userAddress",
+									"type": "address"
+								},
+								{
+									"internalType": "enum Role",
+									"name": "roleToRevoke",
+									"type": "uint8"
+								}
+							],
+							"name": "revokeRole",
+							"outputs": [],
+							"stateMutability": "nonpayable",
+							"type": "function"
+						}
+					],
+					"devdoc": {
+						"kind": "dev",
+						"methods": {},
+						"version": 1
+					},
+					"evm": {
+						"assembly": "",
+						"bytecode": {
+							"functionDebugData": {},
+							"generatedSources": [],
+							"linkReferences": {},
+							"object": "",
+							"opcodes": "",
+							"sourceMap": ""
+						},
+						"deployedBytecode": {
+							"functionDebugData": {},
+							"generatedSources": [],
+							"immutableReferences": {},
+							"linkReferences": {},
+							"object": "",
+							"opcodes": "",
+							"sourceMap": ""
+						},
+						"gasEstimates": null,
+						"legacyAssembly": null,
+						"methodIdentifiers": {
+							"getRole(address)": "44276733",
+							"grantRole(address,uint8)": "3e840236",
+							"hasRole(address,uint8)": "95a8c58d",
+							"isAdmin(address)": "24d7806c",
+							"isCustomer(address)": "28fd5e83",
+							"isRestaurantOwner(address)": "62f8fd14",
+							"isStaff(address)": "cb510e97",
+							"revokeRole(address,uint8)": "077d3c03"
+						}
+					},
+					"metadata": "{\"compiler\":{\"version\":\"0.8.30+commit.73712a01\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousAdmin\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newAdmin\",\"type\":\"address\"}],\"name\":\"AdminTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"enum Role\",\"name\":\"role\",\"type\":\"uint8\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"granter\",\"type\":\"address\"}],\"name\":\"RoleGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"enum Role\",\"name\":\"role\",\"type\":\"uint8\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"revoker\",\"type\":\"address\"}],\"name\":\"RoleRevoked\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"userAddress\",\"type\":\"address\"}],\"name\":\"getRole\",\"outputs\":[{\"internalType\":\"enum Role\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"userAddress\",\"type\":\"address\"},{\"internalType\":\"enum Role\",\"name\":\"roleToGrant\",\"type\":\"uint8\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"userAddress\",\"type\":\"address\"},{\"internalType\":\"enum Role\",\"name\":\"roleToCheck\",\"type\":\"uint8\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"userAddress\",\"type\":\"address\"}],\"name\":\"isAdmin\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"userAddress\",\"type\":\"address\"}],\"name\":\"isCustomer\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"userAddress\",\"type\":\"address\"}],\"name\":\"isRestaurantOwner\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"userAddress\",\"type\":\"address\"}],\"name\":\"isStaff\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"userAddress\",\"type\":\"address\"},{\"internalType\":\"enum Role\",\"name\":\"roleToRevoke\",\"type\":\"uint8\"}],\"name\":\"revokeRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"interfaces/IRoleAccess.sol\":\"IRoleAccess\"},\"evmVersion\":\"prague\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"interfaces/IRoleAccess.sol\":{\"keccak256\":\"0xf5dabb97cae64f56c0f650861846d8f6db93d7e10c38e6163ed7011568244299\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://58d84f9925842529731a76aef804b7504b852b8c4c3d8d209e50489d3b248e7e\",\"dweb:/ipfs/QmQvhDJoNSQyiS6Mb8kQMwoSwVwZZF9jwtxGSykdahXD8N\"]},\"structs/FoodTypes.sol\":{\"keccak256\":\"0x6349ed8defd63089fdb5a53685a568d3ab0ef9d63c5ca7ea733573e0bd7734d7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c896dd06df3864f42b2906d0a8a59799b57fbfe18094202d0494b4a198ea42b4\",\"dweb:/ipfs/Qma59Lyc5E9p32rumk56SkEhyJHbqFV7wVJveKj7gg5h4m\"]}},\"version\":1}",
+					"storageLayout": {
+						"storage": [],
+						"types": null
+					},
+					"userdoc": {
+						"kind": "user",
+						"methods": {},
+						"version": 1
+					}
+				}
+			}
+		},
+		"sources": {
+			"interfaces/IRoleAccess.sol": {
+				"ast": {
+					"absolutePath": "interfaces/IRoleAccess.sol",
+					"exportedSymbols": {
+						"IRoleAccess": [
+							89
+						],
+						"MenuItem": [
+							123
+						],
+						"Order": [
+							145
+						],
+						"OrderStatus": [
+							102
+						],
+						"Review": [
+							156
+						],
+						"Role": [
+							95
+						]
+					},
+					"id": 90,
+					"license": "MIT",
+					"nodeType": "SourceUnit",
+					"nodes": [
+						{
+							"id": 1,
+							"literals": [
+								"solidity",
+								"^",
+								"0.8",
+								".24"
+							],
+							"nodeType": "PragmaDirective",
+							"src": "33:24:0"
+						},
+						{
+							"absolutePath": "structs/FoodTypes.sol",
+							"file": "../../structs/FoodTypes.sol",
+							"id": 2,
+							"nameLocation": "-1:-1:-1",
+							"nodeType": "ImportDirective",
+							"scope": 90,
+							"sourceUnit": 157,
+							"src": "61:37:0",
+							"symbolAliases": [],
+							"unitAlias": ""
+						},
+						{
+							"abstract": false,
+							"baseContracts": [],
+							"canonicalName": "IRoleAccess",
+							"contractDependencies": [],
+							"contractKind": "interface",
+							"fullyImplemented": false,
+							"id": 89,
+							"linearizedBaseContracts": [
+								89
+							],
+							"name": "IRoleAccess",
+							"nameLocation": "152:11:0",
+							"nodeType": "ContractDefinition",
+							"nodes": [
+								{
+									"anonymous": false,
+									"eventSelector": "454d3be37ac6a7b902340e5413df5663e10f86d1a576286058188216404a88ef",
+									"id": 11,
+									"name": "RoleGranted",
+									"nameLocation": "177:11:0",
+									"nodeType": "EventDefinition",
+									"parameters": {
+										"id": 10,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 4,
+												"indexed": true,
+												"mutability": "mutable",
+												"name": "user",
+												"nameLocation": "205:4:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 11,
+												"src": "189:20:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 3,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "189:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 7,
+												"indexed": true,
+												"mutability": "mutable",
+												"name": "role",
+												"nameLocation": "224:4:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 11,
+												"src": "211:17:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_enum$_Role_$95",
+													"typeString": "enum Role"
+												},
+												"typeName": {
+													"id": 6,
+													"nodeType": "UserDefinedTypeName",
+													"pathNode": {
+														"id": 5,
+														"name": "Role",
+														"nameLocations": [
+															"211:4:0"
+														],
+														"nodeType": "IdentifierPath",
+														"referencedDeclaration": 95,
+														"src": "211:4:0"
+													},
+													"referencedDeclaration": 95,
+													"src": "211:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_enum$_Role_$95",
+														"typeString": "enum Role"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 9,
+												"indexed": true,
+												"mutability": "mutable",
+												"name": "granter",
+												"nameLocation": "246:7:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 11,
+												"src": "230:23:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 8,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "230:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "188:66:0"
+									},
+									"src": "171:84:0"
+								},
+								{
+									"anonymous": false,
+									"eventSelector": "dc8ee88592cee6126ab42f95859fdf2bbf7b0a614a14d4fb307b601e2b5b0b05",
+									"id": 20,
+									"name": "RoleRevoked",
+									"nameLocation": "267:11:0",
+									"nodeType": "EventDefinition",
+									"parameters": {
+										"id": 19,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 13,
+												"indexed": true,
+												"mutability": "mutable",
+												"name": "user",
+												"nameLocation": "295:4:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 20,
+												"src": "279:20:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 12,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "279:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 16,
+												"indexed": true,
+												"mutability": "mutable",
+												"name": "role",
+												"nameLocation": "314:4:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 20,
+												"src": "301:17:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_enum$_Role_$95",
+													"typeString": "enum Role"
+												},
+												"typeName": {
+													"id": 15,
+													"nodeType": "UserDefinedTypeName",
+													"pathNode": {
+														"id": 14,
+														"name": "Role",
+														"nameLocations": [
+															"301:4:0"
+														],
+														"nodeType": "IdentifierPath",
+														"referencedDeclaration": 95,
+														"src": "301:4:0"
+													},
+													"referencedDeclaration": 95,
+													"src": "301:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_enum$_Role_$95",
+														"typeString": "enum Role"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 18,
+												"indexed": true,
+												"mutability": "mutable",
+												"name": "revoker",
+												"nameLocation": "336:7:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 20,
+												"src": "320:23:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 17,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "320:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "278:66:0"
+									},
+									"src": "261:84:0"
+								},
+								{
+									"anonymous": false,
+									"eventSelector": "f8ccb027dfcd135e000e9d45e6cc2d662578a8825d4c45b5e32e0adf67e79ec6",
+									"id": 26,
+									"name": "AdminTransferred",
+									"nameLocation": "357:16:0",
+									"nodeType": "EventDefinition",
+									"parameters": {
+										"id": 25,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 22,
+												"indexed": true,
+												"mutability": "mutable",
+												"name": "previousAdmin",
+												"nameLocation": "390:13:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 26,
+												"src": "374:29:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 21,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "374:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 24,
+												"indexed": true,
+												"mutability": "mutable",
+												"name": "newAdmin",
+												"nameLocation": "421:8:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 26,
+												"src": "405:24:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 23,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "405:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "373:57:0"
+									},
+									"src": "351:80:0"
+								},
+								{
+									"functionSelector": "3e840236",
+									"id": 34,
+									"implemented": false,
+									"kind": "function",
+									"modifiers": [],
+									"name": "grantRole",
+									"nameLocation": "590:9:0",
+									"nodeType": "FunctionDefinition",
+									"parameters": {
+										"id": 32,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 28,
+												"mutability": "mutable",
+												"name": "userAddress",
+												"nameLocation": "608:11:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 34,
+												"src": "600:19:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 27,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "600:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 31,
+												"mutability": "mutable",
+												"name": "roleToGrant",
+												"nameLocation": "626:11:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 34,
+												"src": "621:16:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_enum$_Role_$95",
+													"typeString": "enum Role"
+												},
+												"typeName": {
+													"id": 30,
+													"nodeType": "UserDefinedTypeName",
+													"pathNode": {
+														"id": 29,
+														"name": "Role",
+														"nameLocations": [
+															"621:4:0"
+														],
+														"nodeType": "IdentifierPath",
+														"referencedDeclaration": 95,
+														"src": "621:4:0"
+													},
+													"referencedDeclaration": 95,
+													"src": "621:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_enum$_Role_$95",
+														"typeString": "enum Role"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "599:39:0"
+									},
+									"returnParameters": {
+										"id": 33,
+										"nodeType": "ParameterList",
+										"parameters": [],
+										"src": "647:0:0"
+									},
+									"scope": 89,
+									"src": "581:67:0",
+									"stateMutability": "nonpayable",
+									"virtual": false,
+									"visibility": "external"
+								},
+								{
+									"functionSelector": "077d3c03",
+									"id": 42,
+									"implemented": false,
+									"kind": "function",
+									"modifiers": [],
+									"name": "revokeRole",
+									"nameLocation": "663:10:0",
+									"nodeType": "FunctionDefinition",
+									"parameters": {
+										"id": 40,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 36,
+												"mutability": "mutable",
+												"name": "userAddress",
+												"nameLocation": "682:11:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 42,
+												"src": "674:19:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 35,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "674:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 39,
+												"mutability": "mutable",
+												"name": "roleToRevoke",
+												"nameLocation": "700:12:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 42,
+												"src": "695:17:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_enum$_Role_$95",
+													"typeString": "enum Role"
+												},
+												"typeName": {
+													"id": 38,
+													"nodeType": "UserDefinedTypeName",
+													"pathNode": {
+														"id": 37,
+														"name": "Role",
+														"nameLocations": [
+															"695:4:0"
+														],
+														"nodeType": "IdentifierPath",
+														"referencedDeclaration": 95,
+														"src": "695:4:0"
+													},
+													"referencedDeclaration": 95,
+													"src": "695:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_enum$_Role_$95",
+														"typeString": "enum Role"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "673:40:0"
+									},
+									"returnParameters": {
+										"id": 41,
+										"nodeType": "ParameterList",
+										"parameters": [],
+										"src": "722:0:0"
+									},
+									"scope": 89,
+									"src": "654:69:0",
+									"stateMutability": "nonpayable",
+									"virtual": false,
+									"visibility": "external"
+								},
+								{
+									"functionSelector": "44276733",
+									"id": 50,
+									"implemented": false,
+									"kind": "function",
+									"modifiers": [],
+									"name": "getRole",
+									"nameLocation": "1122:7:0",
+									"nodeType": "FunctionDefinition",
+									"parameters": {
+										"id": 45,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 44,
+												"mutability": "mutable",
+												"name": "userAddress",
+												"nameLocation": "1138:11:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 50,
+												"src": "1130:19:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 43,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "1130:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "1129:21:0"
+									},
+									"returnParameters": {
+										"id": 49,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 48,
+												"mutability": "mutable",
+												"name": "",
+												"nameLocation": "-1:-1:-1",
+												"nodeType": "VariableDeclaration",
+												"scope": 50,
+												"src": "1174:4:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_enum$_Role_$95",
+													"typeString": "enum Role"
+												},
+												"typeName": {
+													"id": 47,
+													"nodeType": "UserDefinedTypeName",
+													"pathNode": {
+														"id": 46,
+														"name": "Role",
+														"nameLocations": [
+															"1174:4:0"
+														],
+														"nodeType": "IdentifierPath",
+														"referencedDeclaration": 95,
+														"src": "1174:4:0"
+													},
+													"referencedDeclaration": 95,
+													"src": "1174:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_enum$_Role_$95",
+														"typeString": "enum Role"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "1173:6:0"
+									},
+									"scope": 89,
+									"src": "1113:67:0",
+									"stateMutability": "view",
+									"virtual": false,
+									"visibility": "external"
+								},
+								{
+									"functionSelector": "95a8c58d",
+									"id": 60,
+									"implemented": false,
+									"kind": "function",
+									"modifiers": [],
+									"name": "hasRole",
+									"nameLocation": "1195:7:0",
+									"nodeType": "FunctionDefinition",
+									"parameters": {
+										"id": 56,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 52,
+												"mutability": "mutable",
+												"name": "userAddress",
+												"nameLocation": "1211:11:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 60,
+												"src": "1203:19:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 51,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "1203:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											},
+											{
+												"constant": false,
+												"id": 55,
+												"mutability": "mutable",
+												"name": "roleToCheck",
+												"nameLocation": "1229:11:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 60,
+												"src": "1224:16:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_enum$_Role_$95",
+													"typeString": "enum Role"
+												},
+												"typeName": {
+													"id": 54,
+													"nodeType": "UserDefinedTypeName",
+													"pathNode": {
+														"id": 53,
+														"name": "Role",
+														"nameLocations": [
+															"1224:4:0"
+														],
+														"nodeType": "IdentifierPath",
+														"referencedDeclaration": 95,
+														"src": "1224:4:0"
+													},
+													"referencedDeclaration": 95,
+													"src": "1224:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_enum$_Role_$95",
+														"typeString": "enum Role"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "1202:39:0"
+									},
+									"returnParameters": {
+										"id": 59,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 58,
+												"mutability": "mutable",
+												"name": "",
+												"nameLocation": "-1:-1:-1",
+												"nodeType": "VariableDeclaration",
+												"scope": 60,
+												"src": "1265:4:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bool",
+													"typeString": "bool"
+												},
+												"typeName": {
+													"id": 57,
+													"name": "bool",
+													"nodeType": "ElementaryTypeName",
+													"src": "1265:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bool",
+														"typeString": "bool"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "1264:6:0"
+									},
+									"scope": 89,
+									"src": "1186:85:0",
+									"stateMutability": "view",
+									"virtual": false,
+									"visibility": "external"
+								},
+								{
+									"functionSelector": "24d7806c",
+									"id": 67,
+									"implemented": false,
+									"kind": "function",
+									"modifiers": [],
+									"name": "isAdmin",
+									"nameLocation": "1286:7:0",
+									"nodeType": "FunctionDefinition",
+									"parameters": {
+										"id": 63,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 62,
+												"mutability": "mutable",
+												"name": "userAddress",
+												"nameLocation": "1302:11:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 67,
+												"src": "1294:19:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 61,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "1294:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "1293:21:0"
+									},
+									"returnParameters": {
+										"id": 66,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 65,
+												"mutability": "mutable",
+												"name": "",
+												"nameLocation": "-1:-1:-1",
+												"nodeType": "VariableDeclaration",
+												"scope": 67,
+												"src": "1338:4:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bool",
+													"typeString": "bool"
+												},
+												"typeName": {
+													"id": 64,
+													"name": "bool",
+													"nodeType": "ElementaryTypeName",
+													"src": "1338:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bool",
+														"typeString": "bool"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "1337:6:0"
+									},
+									"scope": 89,
+									"src": "1277:67:0",
+									"stateMutability": "view",
+									"virtual": false,
+									"visibility": "external"
+								},
+								{
+									"functionSelector": "cb510e97",
+									"id": 74,
+									"implemented": false,
+									"kind": "function",
+									"modifiers": [],
+									"name": "isStaff",
+									"nameLocation": "1359:7:0",
+									"nodeType": "FunctionDefinition",
+									"parameters": {
+										"id": 70,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 69,
+												"mutability": "mutable",
+												"name": "userAddress",
+												"nameLocation": "1375:11:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 74,
+												"src": "1367:19:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 68,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "1367:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "1366:21:0"
+									},
+									"returnParameters": {
+										"id": 73,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 72,
+												"mutability": "mutable",
+												"name": "",
+												"nameLocation": "-1:-1:-1",
+												"nodeType": "VariableDeclaration",
+												"scope": 74,
+												"src": "1411:4:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bool",
+													"typeString": "bool"
+												},
+												"typeName": {
+													"id": 71,
+													"name": "bool",
+													"nodeType": "ElementaryTypeName",
+													"src": "1411:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bool",
+														"typeString": "bool"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "1410:6:0"
+									},
+									"scope": 89,
+									"src": "1350:67:0",
+									"stateMutability": "view",
+									"virtual": false,
+									"visibility": "external"
+								},
+								{
+									"functionSelector": "28fd5e83",
+									"id": 81,
+									"implemented": false,
+									"kind": "function",
+									"modifiers": [],
+									"name": "isCustomer",
+									"nameLocation": "1432:10:0",
+									"nodeType": "FunctionDefinition",
+									"parameters": {
+										"id": 77,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 76,
+												"mutability": "mutable",
+												"name": "userAddress",
+												"nameLocation": "1451:11:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 81,
+												"src": "1443:19:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 75,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "1443:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "1442:21:0"
+									},
+									"returnParameters": {
+										"id": 80,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 79,
+												"mutability": "mutable",
+												"name": "",
+												"nameLocation": "-1:-1:-1",
+												"nodeType": "VariableDeclaration",
+												"scope": 81,
+												"src": "1487:4:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bool",
+													"typeString": "bool"
+												},
+												"typeName": {
+													"id": 78,
+													"name": "bool",
+													"nodeType": "ElementaryTypeName",
+													"src": "1487:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bool",
+														"typeString": "bool"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "1486:6:0"
+									},
+									"scope": 89,
+									"src": "1423:70:0",
+									"stateMutability": "view",
+									"virtual": false,
+									"visibility": "external"
+								},
+								{
+									"functionSelector": "62f8fd14",
+									"id": 88,
+									"implemented": false,
+									"kind": "function",
+									"modifiers": [],
+									"name": "isRestaurantOwner",
+									"nameLocation": "1508:17:0",
+									"nodeType": "FunctionDefinition",
+									"parameters": {
+										"id": 84,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 83,
+												"mutability": "mutable",
+												"name": "userAddress",
+												"nameLocation": "1534:11:0",
+												"nodeType": "VariableDeclaration",
+												"scope": 88,
+												"src": "1526:19:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_address",
+													"typeString": "address"
+												},
+												"typeName": {
+													"id": 82,
+													"name": "address",
+													"nodeType": "ElementaryTypeName",
+													"src": "1526:7:0",
+													"stateMutability": "nonpayable",
+													"typeDescriptions": {
+														"typeIdentifier": "t_address",
+														"typeString": "address"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "1525:21:0"
+									},
+									"returnParameters": {
+										"id": 87,
+										"nodeType": "ParameterList",
+										"parameters": [
+											{
+												"constant": false,
+												"id": 86,
+												"mutability": "mutable",
+												"name": "",
+												"nameLocation": "-1:-1:-1",
+												"nodeType": "VariableDeclaration",
+												"scope": 88,
+												"src": "1570:4:0",
+												"stateVariable": false,
+												"storageLocation": "default",
+												"typeDescriptions": {
+													"typeIdentifier": "t_bool",
+													"typeString": "bool"
+												},
+												"typeName": {
+													"id": 85,
+													"name": "bool",
+													"nodeType": "ElementaryTypeName",
+													"src": "1570:4:0",
+													"typeDescriptions": {
+														"typeIdentifier": "t_bool",
+														"typeString": "bool"
+													}
+												},
+												"visibility": "internal"
+											}
+										],
+										"src": "1569:6:0"
+									},
+									"scope": 89,
+									"src": "1499:77:0",
+									"stateMutability": "view",
+									"virtual": false,
+									"visibility": "external"
+								}
+							],
+							"scope": 90,
+							"src": "142:1437:0",
+							"usedErrors": [],
+							"usedEvents": [
+								11,
+								20,
+								26
+							]
+						}
+					],
+					"src": "33:1546:0"
+				},
+				"id": 0
+			},
+			"structs/FoodTypes.sol": {
+				"ast": {
+					"absolutePath": "structs/FoodTypes.sol",
+					"exportedSymbols": {
+						"MenuItem": [
+							123
+						],
+						"Order": [
+							145
+						],
+						"OrderStatus": [
+							102
+						],
+						"Review": [
+							156
+						],
+						"Role": [
+							95
+						]
+					},
+					"id": 157,
+					"license": "MIT",
+					"nodeType": "SourceUnit",
+					"nodes": [
+						{
+							"id": 91,
+							"literals": [
+								"solidity",
+								"^",
+								"0.8",
+								".24"
+							],
+							"nodeType": "PragmaDirective",
+							"src": "33:24:1"
+						},
+						{
+							"canonicalName": "Role",
+							"id": 95,
+							"members": [
+								{
+									"id": 92,
+									"name": "Admin",
+									"nameLocation": "73:5:1",
+									"nodeType": "EnumValue",
+									"src": "73:5:1"
+								},
+								{
+									"id": 93,
+									"name": "Staff",
+									"nameLocation": "80:5:1",
+									"nodeType": "EnumValue",
+									"src": "80:5:1"
+								},
+								{
+									"id": 94,
+									"name": "Customer",
+									"nameLocation": "87:8:1",
+									"nodeType": "EnumValue",
+									"src": "87:8:1"
+								}
+							],
+							"name": "Role",
+							"nameLocation": "66:4:1",
+							"nodeType": "EnumDefinition",
+							"src": "61:36:1"
+						},
+						{
+							"canonicalName": "OrderStatus",
+							"id": 102,
+							"members": [
+								{
+									"id": 96,
+									"name": "Placed",
+									"nameLocation": "118:6:1",
+									"nodeType": "EnumValue",
+									"src": "118:6:1"
+								},
+								{
+									"id": 97,
+									"name": "Confirmed",
+									"nameLocation": "126:9:1",
+									"nodeType": "EnumValue",
+									"src": "126:9:1"
+								},
+								{
+									"id": 98,
+									"name": "Preparing",
+									"nameLocation": "137:9:1",
+									"nodeType": "EnumValue",
+									"src": "137:9:1"
+								},
+								{
+									"id": 99,
+									"name": "Ready",
+									"nameLocation": "148:5:1",
+									"nodeType": "EnumValue",
+									"src": "148:5:1"
+								},
+								{
+									"id": 100,
+									"name": "Cancelled",
+									"nameLocation": "155:9:1",
+									"nodeType": "EnumValue",
+									"src": "155:9:1"
+								},
+								{
+									"id": 101,
+									"name": "Completed",
+									"nameLocation": "166:9:1",
+									"nodeType": "EnumValue",
+									"src": "166:9:1"
+								}
+							],
+							"name": "OrderStatus",
+							"nameLocation": "104:11:1",
+							"nodeType": "EnumDefinition",
+							"src": "99:78:1"
+						},
+						{
+							"canonicalName": "MenuItem",
+							"id": 123,
+							"members": [
+								{
+									"constant": false,
+									"id": 104,
+									"mutability": "mutable",
+									"name": "id",
+									"nameLocation": "212:2:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 123,
+									"src": "204:10:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint128",
+										"typeString": "uint128"
+									},
+									"typeName": {
+										"id": 103,
+										"name": "uint128",
+										"nodeType": "ElementaryTypeName",
+										"src": "204:7:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint128",
+											"typeString": "uint128"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 106,
+									"mutability": "mutable",
+									"name": "restaurantId",
+									"nameLocation": "229:12:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 123,
+									"src": "221:20:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint128",
+										"typeString": "uint128"
+									},
+									"typeName": {
+										"id": 105,
+										"name": "uint128",
+										"nodeType": "ElementaryTypeName",
+										"src": "221:7:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint128",
+											"typeString": "uint128"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 108,
+									"mutability": "mutable",
+									"name": "name",
+									"nameLocation": "255:4:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 123,
+									"src": "248:11:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_string_storage_ptr",
+										"typeString": "string"
+									},
+									"typeName": {
+										"id": 107,
+										"name": "string",
+										"nodeType": "ElementaryTypeName",
+										"src": "248:6:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_string_storage_ptr",
+											"typeString": "string"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 110,
+									"mutability": "mutable",
+									"name": "price",
+									"nameLocation": "274:5:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 123,
+									"src": "266:13:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint128",
+										"typeString": "uint128"
+									},
+									"typeName": {
+										"id": 109,
+										"name": "uint128",
+										"nodeType": "ElementaryTypeName",
+										"src": "266:7:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint128",
+											"typeString": "uint128"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 112,
+									"mutability": "mutable",
+									"name": "available",
+									"nameLocation": "291:9:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 123,
+									"src": "286:14:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_bool",
+										"typeString": "bool"
+									},
+									"typeName": {
+										"id": 111,
+										"name": "bool",
+										"nodeType": "ElementaryTypeName",
+										"src": "286:4:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_bool",
+											"typeString": "bool"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 114,
+									"mutability": "mutable",
+									"name": "description",
+									"nameLocation": "314:11:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 123,
+									"src": "307:18:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_string_storage_ptr",
+										"typeString": "string"
+									},
+									"typeName": {
+										"id": 113,
+										"name": "string",
+										"nodeType": "ElementaryTypeName",
+										"src": "307:6:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_string_storage_ptr",
+											"typeString": "string"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 116,
+									"mutability": "mutable",
+									"name": "category",
+									"nameLocation": "339:8:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 123,
+									"src": "332:15:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_string_storage_ptr",
+										"typeString": "string"
+									},
+									"typeName": {
+										"id": 115,
+										"name": "string",
+										"nodeType": "ElementaryTypeName",
+										"src": "332:6:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_string_storage_ptr",
+											"typeString": "string"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 118,
+									"mutability": "mutable",
+									"name": "totalRating",
+									"nameLocation": "362:11:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 123,
+									"src": "354:19:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint128",
+										"typeString": "uint128"
+									},
+									"typeName": {
+										"id": 117,
+										"name": "uint128",
+										"nodeType": "ElementaryTypeName",
+										"src": "354:7:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint128",
+											"typeString": "uint128"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 120,
+									"mutability": "mutable",
+									"name": "ratingCount",
+									"nameLocation": "388:11:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 123,
+									"src": "380:19:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint128",
+										"typeString": "uint128"
+									},
+									"typeName": {
+										"id": 119,
+										"name": "uint128",
+										"nodeType": "ElementaryTypeName",
+										"src": "380:7:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint128",
+											"typeString": "uint128"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 122,
+									"mutability": "mutable",
+									"name": "preparationTime",
+									"nameLocation": "414:15:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 123,
+									"src": "406:23:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint128",
+										"typeString": "uint128"
+									},
+									"typeName": {
+										"id": 121,
+										"name": "uint128",
+										"nodeType": "ElementaryTypeName",
+										"src": "406:7:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint128",
+											"typeString": "uint128"
+										}
+									},
+									"visibility": "internal"
+								}
+							],
+							"name": "MenuItem",
+							"nameLocation": "188:8:1",
+							"nodeType": "StructDefinition",
+							"scope": 157,
+							"src": "181:252:1",
+							"visibility": "public"
+						},
+						{
+							"canonicalName": "Order",
+							"id": 145,
+							"members": [
+								{
+									"constant": false,
+									"id": 125,
+									"mutability": "mutable",
+									"name": "id",
+									"nameLocation": "465:2:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 145,
+									"src": "457:10:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint128",
+										"typeString": "uint128"
+									},
+									"typeName": {
+										"id": 124,
+										"name": "uint128",
+										"nodeType": "ElementaryTypeName",
+										"src": "457:7:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint128",
+											"typeString": "uint128"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 127,
+									"mutability": "mutable",
+									"name": "customer",
+									"nameLocation": "482:8:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 145,
+									"src": "474:16:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_address",
+										"typeString": "address"
+									},
+									"typeName": {
+										"id": 126,
+										"name": "address",
+										"nodeType": "ElementaryTypeName",
+										"src": "474:7:1",
+										"stateMutability": "nonpayable",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 129,
+									"mutability": "mutable",
+									"name": "restaurantId",
+									"nameLocation": "505:12:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 145,
+									"src": "497:20:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint128",
+										"typeString": "uint128"
+									},
+									"typeName": {
+										"id": 128,
+										"name": "uint128",
+										"nodeType": "ElementaryTypeName",
+										"src": "497:7:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint128",
+											"typeString": "uint128"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 132,
+									"mutability": "mutable",
+									"name": "itemIds",
+									"nameLocation": "534:7:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 145,
+									"src": "524:17:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_array$_t_uint128_$dyn_storage_ptr",
+										"typeString": "uint128[]"
+									},
+									"typeName": {
+										"baseType": {
+											"id": 130,
+											"name": "uint128",
+											"nodeType": "ElementaryTypeName",
+											"src": "524:7:1",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											}
+										},
+										"id": 131,
+										"nodeType": "ArrayTypeName",
+										"src": "524:9:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_array$_t_uint128_$dyn_storage_ptr",
+											"typeString": "uint128[]"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 135,
+									"mutability": "mutable",
+									"name": "quantities",
+									"nameLocation": "558:10:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 145,
+									"src": "548:20:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_array$_t_uint128_$dyn_storage_ptr",
+										"typeString": "uint128[]"
+									},
+									"typeName": {
+										"baseType": {
+											"id": 133,
+											"name": "uint128",
+											"nodeType": "ElementaryTypeName",
+											"src": "548:7:1",
+											"typeDescriptions": {
+												"typeIdentifier": "t_uint128",
+												"typeString": "uint128"
+											}
+										},
+										"id": 134,
+										"nodeType": "ArrayTypeName",
+										"src": "548:9:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_array$_t_uint128_$dyn_storage_ptr",
+											"typeString": "uint128[]"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 137,
+									"mutability": "mutable",
+									"name": "totalPrice",
+									"nameLocation": "583:10:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 145,
+									"src": "575:18:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint128",
+										"typeString": "uint128"
+									},
+									"typeName": {
+										"id": 136,
+										"name": "uint128",
+										"nodeType": "ElementaryTypeName",
+										"src": "575:7:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint128",
+											"typeString": "uint128"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 140,
+									"mutability": "mutable",
+									"name": "status",
+									"nameLocation": "612:6:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 145,
+									"src": "600:18:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_enum$_OrderStatus_$102",
+										"typeString": "enum OrderStatus"
+									},
+									"typeName": {
+										"id": 139,
+										"nodeType": "UserDefinedTypeName",
+										"pathNode": {
+											"id": 138,
+											"name": "OrderStatus",
+											"nameLocations": [
+												"600:11:1"
+											],
+											"nodeType": "IdentifierPath",
+											"referencedDeclaration": 102,
+											"src": "600:11:1"
+										},
+										"referencedDeclaration": 102,
+										"src": "600:11:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_enum$_OrderStatus_$102",
+											"typeString": "enum OrderStatus"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 142,
+									"mutability": "mutable",
+									"name": "timestamp",
+									"nameLocation": "633:9:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 145,
+									"src": "625:17:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint128",
+										"typeString": "uint128"
+									},
+									"typeName": {
+										"id": 141,
+										"name": "uint128",
+										"nodeType": "ElementaryTypeName",
+										"src": "625:7:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint128",
+											"typeString": "uint128"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 144,
+									"mutability": "mutable",
+									"name": "preparationTime",
+									"nameLocation": "657:15:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 145,
+									"src": "649:23:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint128",
+										"typeString": "uint128"
+									},
+									"typeName": {
+										"id": 143,
+										"name": "uint128",
+										"nodeType": "ElementaryTypeName",
+										"src": "649:7:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint128",
+											"typeString": "uint128"
+										}
+									},
+									"visibility": "internal"
+								}
+							],
+							"name": "Order",
+							"nameLocation": "444:5:1",
+							"nodeType": "StructDefinition",
+							"scope": 157,
+							"src": "437:239:1",
+							"visibility": "public"
+						},
+						{
+							"canonicalName": "Review",
+							"id": 156,
+							"members": [
+								{
+									"constant": false,
+									"id": 147,
+									"mutability": "mutable",
+									"name": "customer",
+									"nameLocation": "709:8:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 156,
+									"src": "701:16:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_address",
+										"typeString": "address"
+									},
+									"typeName": {
+										"id": 146,
+										"name": "address",
+										"nodeType": "ElementaryTypeName",
+										"src": "701:7:1",
+										"stateMutability": "nonpayable",
+										"typeDescriptions": {
+											"typeIdentifier": "t_address",
+											"typeString": "address"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 149,
+									"mutability": "mutable",
+									"name": "restaurantId",
+									"nameLocation": "732:12:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 156,
+									"src": "724:20:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint128",
+										"typeString": "uint128"
+									},
+									"typeName": {
+										"id": 148,
+										"name": "uint128",
+										"nodeType": "ElementaryTypeName",
+										"src": "724:7:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint128",
+											"typeString": "uint128"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 151,
+									"mutability": "mutable",
+									"name": "rating",
+									"nameLocation": "757:6:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 156,
+									"src": "751:12:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint8",
+										"typeString": "uint8"
+									},
+									"typeName": {
+										"id": 150,
+										"name": "uint8",
+										"nodeType": "ElementaryTypeName",
+										"src": "751:5:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint8",
+											"typeString": "uint8"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 153,
+									"mutability": "mutable",
+									"name": "comment",
+									"nameLocation": "777:7:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 156,
+									"src": "770:14:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_string_storage_ptr",
+										"typeString": "string"
+									},
+									"typeName": {
+										"id": 152,
+										"name": "string",
+										"nodeType": "ElementaryTypeName",
+										"src": "770:6:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_string_storage_ptr",
+											"typeString": "string"
+										}
+									},
+									"visibility": "internal"
+								},
+								{
+									"constant": false,
+									"id": 155,
+									"mutability": "mutable",
+									"name": "timestamp",
+									"nameLocation": "799:9:1",
+									"nodeType": "VariableDeclaration",
+									"scope": 156,
+									"src": "791:17:1",
+									"stateVariable": false,
+									"storageLocation": "default",
+									"typeDescriptions": {
+										"typeIdentifier": "t_uint128",
+										"typeString": "uint128"
+									},
+									"typeName": {
+										"id": 154,
+										"name": "uint128",
+										"nodeType": "ElementaryTypeName",
+										"src": "791:7:1",
+										"typeDescriptions": {
+											"typeIdentifier": "t_uint128",
+											"typeString": "uint128"
+										}
+									},
+									"visibility": "internal"
+								}
+							],
+							"name": "Review",
+							"nameLocation": "687:6:1",
+							"nodeType": "StructDefinition",
+							"scope": 157,
+							"src": "680:132:1",
+							"visibility": "public"
+						}
+					],
+					"src": "33:779:1"
+				},
+				"id": 1
+			}
+		}
+	}
+}

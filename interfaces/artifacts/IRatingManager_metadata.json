@@ -116,7 +116,7 @@
 								"type": "uint128"
 							}
 						],
-						"internalType": "struct Structs.RatingForEmployee[]",
+						"internalType": "struct RatingForEmployee[]",
 						"name": "",
 						"type": "tuple[]"
 					}
@@ -162,7 +162,7 @@
 								"type": "uint128"
 							}
 						],
-						"internalType": "struct Structs.RatingForRestaurant[]",
+						"internalType": "struct RatingForRestaurant[]",
 						"name": "",
 						"type": "tuple[]"
 					}
@@ -244,25 +244,25 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 0
+			"runs": 200
 		},
 		"remappings": []
 	},
 	"sources": {
 		"interfaces/IRatingManager.sol": {
-			"keccak256": "0xa9147f76eac5d0916e02a128abb5461e21a2f745e277120b17308ccb1023d520",
+			"keccak256": "0xda6c6e940d54188dd5d2c14e4965c85849aaaf269e3ca9b457bb782f1354db44",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b0d0953968d232ca77d15966ddab777b170576010b1c23b30439d2d14bf77ca4",
-				"dweb:/ipfs/QmPBRGdUoLNrBzJDbQ4jMk6dHrkhNBUAz8A3d9NZdnTCAQ"
+				"bzz-raw://6a37d70ba086a245e43c057fd558649969f73a67ad7ea307b719e530278b0951",
+				"dweb:/ipfs/QmZYYxrtPWqnumUTog1BpwrEYTdTFsEjVHzuYBSNRqViKN"
 			]
 		},
 		"types/Structs.sol": {
-			"keccak256": "0x413f0168cb488bdb09610b6ecfe14de1bbb4aeb35afa24d133a50bdcb7d7ea4d",
+			"keccak256": "0x5e5db6a6e0dd123bea6e348c925a03392e66405b56c5e7c7ae6f32ec0977a7a7",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://bce49ef8e4680650022b70f9038cc2ca8f31d887458dc063110c1e6d18a0338c",
-				"dweb:/ipfs/QmP2sM6QfwLDA3q8FwzE6JLsKFP6BXyDy5g8fz94EtPoR1"
+				"bzz-raw://0b50113676c6e2c614b1e71be3a206004e15800bc10db48c3eecd120dcd20c66",
+				"dweb:/ipfs/QmQvkc1SSkMi4vKCDARuZ6TKUTdyRQCQPYBK9MJatS3cyA"
 			]
 		}
 	},

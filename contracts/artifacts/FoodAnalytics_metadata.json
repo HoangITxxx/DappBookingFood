@@ -1,0 +1,214 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_orderManager",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "_reviewManager",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "restaurantId",
+						"type": "uint128"
+					}
+				],
+				"name": "getRestaurantAverageRating",
+				"outputs": [
+					{
+						"internalType": "uint128",
+						"name": "averageRating",
+						"type": "uint128"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "restaurantId",
+						"type": "uint128"
+					}
+				],
+				"name": "getTotalOrdersByRestaurant",
+				"outputs": [
+					{
+						"internalType": "uint128",
+						"name": "totalOrders",
+						"type": "uint128"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "orderManager",
+				"outputs": [
+					{
+						"internalType": "contract OrderManager",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "reviewManager",
+				"outputs": [
+					{
+						"internalType": "contract ReviewManager",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/FoodAnalytics.sol": "FoodAnalytics"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": true,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol": {
+			"keccak256": "0xc163fcf9bb10138631a9ba5564df1fa25db9adff73bd9ee868a8ae1858fe093a",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9706d43a0124053d9880f6e31a59f31bc0a6a3dc1acd66ce0a16e1111658c5f6",
+				"dweb:/ipfs/QmUFmfowzkRwGtDu36cXV9SPTBHJ3n7dG9xQiK5B28jTf2"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
+			"keccak256": "0xdb4d24ee2c087c391d587cd17adfe5b3f9d93b3110b1388c2ab6c7c0ad1dcd05",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://ab7b6d5b9e2b88176312967fe0f0e78f3d9a1422fa5e4b64e2440c35869b5d08",
+				"dweb:/ipfs/QmXKYWWyzcLg1B2k7Sb1qkEXgLCYfXecR9wYW5obRzWP1Q"
+			]
+		},
+		"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol": {
+			"keccak256": "0xdbef5f0c787055227243a7318ef74c8a5a1108ca3a07f2b3a00ef67769e1e397",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://08e39f23d5b4692f9a40803e53a8156b72b4c1f9902a88cd65ba964db103dab9",
+				"dweb:/ipfs/QmPKn6EYDgpga7KtpkA8wV2yJCYGMtc9K4LkJfhKX2RVSV"
+			]
+		},
+		"access/RoleAccess.sol": {
+			"keccak256": "0x069c0d264b725468cb271467a2f3db37ef9f6af392eb03a1f609bca828d94818",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://06135d76213b4b4d3384d201ccc770d6754a45e9a02655218a64a7f86053293d",
+				"dweb:/ipfs/QmPBmdyyofgknAsEyit7igUnbmRZ55Tro9zqfRvA55qFu7"
+			]
+		},
+		"contracts/FoodAnalytics.sol": {
+			"keccak256": "0x8b93659f7e51fd3711340d5ef0e65544357bde0d051485637788b204fac2a258",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d9e56e7453f06a83a4170dbe602ca2e458fff59bcb4d2b101959ae6bad183661",
+				"dweb:/ipfs/QmbAKgN6QoPTfibpsRJ9D59cL2h9AkKANBLUJACuMkUfRb"
+			]
+		},
+		"contracts/MenuManager.sol": {
+			"keccak256": "0x8d77d1a4ce22bd55253faee4d0bc8651883277281dcb139dd78570ad1660130f",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://336761424dc1bf42bfd3e9222d4e39958f5b6d93c45c9c0075e6385b5eff2f2c",
+				"dweb:/ipfs/QmYh1boSh1f8iCLbU8u2b2jj3Sde3Qpxe39czJkYNZBn2x"
+			]
+		},
+		"contracts/OrderManager.sol": {
+			"keccak256": "0x365ed203317d65be247270f49edb011887e624b69ac6e42ca0a0647a8d283802",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7498978d9b85cf9ebf442584a7faf184f7c4162aaab75110f86f98ba8faf491b",
+				"dweb:/ipfs/QmNj4EPRJr3tJcDHKMsZiFTxuhdRsA3cHvVQC1zqQQYwjG"
+			]
+		},
+		"contracts/ReviewManager.sol": {
+			"keccak256": "0x64663aa6981018fd86d51b5a97db472330be995fea013676ae203702379e2f68",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://cc33b26e20e51770d43945c2fc86b7ddbc6a3bf4d60bd16b9c7fe71b63c831ae",
+				"dweb:/ipfs/QmT2hAzVuRHYnpbdCZM5Epn9sMLQ8tjyqJsXT32pqSxtrB"
+			]
+		},
+		"interfaces/IMenuManager.sol": {
+			"keccak256": "0xa163e5220c516c635cbd68d8f26d5fc00c3b64037178b13598abd32b30067438",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d02857bf89d679b19f27d113560b89e0e8a35db6e762eb79e54bfa2ee499f5b2",
+				"dweb:/ipfs/QmUWpg1VKzq68Lob7EW9GtLRRjrhyRT672W1pu7z4c8fyc"
+			]
+		},
+		"interfaces/IOrderManager.sol": {
+			"keccak256": "0xc4f1108f563ed1cd521e3f34118caf3b5f37ee68e22f42b5b12047ff79c3165d",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://95ab2d9ede15d59269fd5cfd2f92d8b0e6cc3bf2c243c45ef50a326ed0bbfad5",
+				"dweb:/ipfs/QmWVjF2aTrqMHPzrwneTgkWBMtMJEUwySy8i2iGP2712pK"
+			]
+		},
+		"interfaces/IReviewManager.sol": {
+			"keccak256": "0xc6e6b6a1e7177624d3930de07950b9d765349ea2d2e2827e5c7277de48afe1f9",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://27f39fe30a07988219b9cd93d903c2a5a14a44736e35430a42b16daecaabb8ac",
+				"dweb:/ipfs/QmTsLnGfvtLsz97qJQS4JYVHPEdY8mxtZBxJ6ZRJD75bAq"
+			]
+		},
+		"structs/FoodTypes.sol": {
+			"keccak256": "0x6349ed8defd63089fdb5a53685a568d3ab0ef9d63c5ca7ea733573e0bd7734d7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c896dd06df3864f42b2906d0a8a59799b57fbfe18094202d0494b4a198ea42b4",
+				"dweb:/ipfs/Qma59Lyc5E9p32rumk56SkEhyJHbqFV7wVJveKj7gg5h4m"
+			]
+		}
+	},
+	"version": 1
+}

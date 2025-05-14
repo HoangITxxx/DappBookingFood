@@ -9,32 +9,13 @@
 				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": false,
-						"internalType": "address",
-						"name": "recipient",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint128",
-						"name": "amount",
-						"type": "uint128"
-					}
-				],
-				"name": "PaymentReleased",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
+						"indexed": true,
 						"internalType": "uint128",
 						"name": "restaurantId",
 						"type": "uint128"
 					},
 					{
-						"indexed": false,
+						"indexed": true,
 						"internalType": "address",
 						"name": "owner",
 						"type": "address"
@@ -44,72 +25,22 @@
 				"type": "event"
 			},
 			{
-				"anonymous": false,
 				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "address",
-						"name": "user",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "enum Structs.Role",
-						"name": "role",
-						"type": "uint8"
-					}
-				],
-				"name": "RoleAssigned",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "uint8",
-						"name": "newPercentage",
-						"type": "uint8"
-					}
-				],
-				"name": "ServiceFeeUpdated",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "address",
-						"name": "staff",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint128",
-						"name": "restaurantId",
-						"type": "uint128"
-					}
-				],
-				"name": "StaffAssigned",
-				"type": "event"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "staff",
-						"type": "address"
-					},
 					{
 						"internalType": "uint128",
 						"name": "restaurantId",
 						"type": "uint128"
 					}
 				],
-				"name": "assignStaff",
-				"outputs": [],
-				"stateMutability": "nonpayable",
+				"name": "getRestaurantOwner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -122,19 +53,6 @@
 						"type": "uint128"
 					}
 				],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint8",
-						"name": "percentage",
-						"type": "uint8"
-					}
-				],
-				"name": "setServiceFeePercentage",
-				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			}
@@ -161,25 +79,17 @@
 		},
 		"optimizer": {
 			"enabled": true,
-			"runs": 0
+			"runs": 200
 		},
 		"remappings": []
 	},
 	"sources": {
 		"interfaces/IRestaurantManager.sol": {
-			"keccak256": "0x44040957d13b1afa9e554cd20ce82d42a5018b20eff08d0104ae38d085bff5af",
+			"keccak256": "0x728c42e0822af1c457cfe953fbc2611c6817ad18df3ab07b76b4b7971df62cf1",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://7682b7389d4cd49856b709676274f1a7ca440695ea2619a72b4b9d0707f0ea89",
-				"dweb:/ipfs/QmQC8cXwNLetuTuH7kBqDSro19zCv3bbtgaJSU8MKQokSP"
-			]
-		},
-		"types/Structs.sol": {
-			"keccak256": "0x413f0168cb488bdb09610b6ecfe14de1bbb4aeb35afa24d133a50bdcb7d7ea4d",
-			"license": "MIT",
-			"urls": [
-				"bzz-raw://bce49ef8e4680650022b70f9038cc2ca8f31d887458dc063110c1e6d18a0338c",
-				"dweb:/ipfs/QmP2sM6QfwLDA3q8FwzE6JLsKFP6BXyDy5g8fz94EtPoR1"
+				"bzz-raw://3001214cafaaab608958e2cc1419c08426c914892e35ac010fe4fe2864b5d016",
+				"dweb:/ipfs/QmUZ45bpeZqfRHnHgBkjL57fFP532DB67chJfMFY5FSx6S"
 			]
 		}
 	},

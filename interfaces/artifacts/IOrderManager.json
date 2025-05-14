@@ -51,9 +51,7 @@
 		"methodIdentifiers": {
 			"cancelOrder(uint128)": "dbc91396",
 			"completeOrder(uint128)": "388f20a8",
-			"getAllOrders(uint128,uint128)": "26912883",
-			"getMyOrders()": "bab5933a",
-			"getOrderDetails(uint128)": "6b813675",
+			"getOrder(uint128)": "117d4128",
 			"placeOrder(uint128,uint128[],uint128[])": "98d88075",
 			"updateOrderStatus(uint128,uint8)": "ddb0c22f"
 		}
@@ -63,51 +61,13 @@
 			"anonymous": false,
 			"inputs": [
 				{
-					"indexed": false,
-					"internalType": "uint128",
-					"name": "id",
-					"type": "uint128"
-				},
-				{
-					"indexed": false,
-					"internalType": "address",
-					"name": "customer",
-					"type": "address"
-				}
-			],
-			"name": "OrderCancelled",
-			"type": "event"
-		},
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": false,
+					"indexed": true,
 					"internalType": "uint128",
 					"name": "orderId",
 					"type": "uint128"
 				},
 				{
-					"indexed": false,
-					"internalType": "address",
-					"name": "customer",
-					"type": "address"
-				}
-			],
-			"name": "OrderCompleted",
-			"type": "event"
-		},
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": false,
-					"internalType": "uint128",
-					"name": "id",
-					"type": "uint128"
-				},
-				{
-					"indexed": false,
+					"indexed": true,
 					"internalType": "address",
 					"name": "customer",
 					"type": "address"
@@ -116,48 +76,16 @@
 					"indexed": false,
 					"internalType": "uint128",
 					"name": "totalPrice",
+					"type": "uint128"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint128",
+					"name": "preparationTime",
 					"type": "uint128"
 				}
 			],
 			"name": "OrderPlaced",
-			"type": "event"
-		},
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": false,
-					"internalType": "uint128",
-					"name": "id",
-					"type": "uint128"
-				},
-				{
-					"indexed": false,
-					"internalType": "enum Structs.OrderStatus",
-					"name": "status",
-					"type": "uint8"
-				}
-			],
-			"name": "OrderStatusUpdated",
-			"type": "event"
-		},
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": false,
-					"internalType": "address",
-					"name": "customer",
-					"type": "address"
-				},
-				{
-					"indexed": false,
-					"internalType": "uint128",
-					"name": "totalPrice",
-					"type": "uint128"
-				}
-			],
-			"name": "RefundProcessed",
 			"type": "event"
 		},
 		{
@@ -190,132 +118,11 @@
 			"inputs": [
 				{
 					"internalType": "uint128",
-					"name": "start",
-					"type": "uint128"
-				},
-				{
-					"internalType": "uint128",
-					"name": "limit",
-					"type": "uint128"
-				}
-			],
-			"name": "getAllOrders",
-			"outputs": [
-				{
-					"components": [
-						{
-							"internalType": "uint128",
-							"name": "id",
-							"type": "uint128"
-						},
-						{
-							"internalType": "address",
-							"name": "customer",
-							"type": "address"
-						},
-						{
-							"internalType": "uint128",
-							"name": "restaurantId",
-							"type": "uint128"
-						},
-						{
-							"internalType": "uint128[]",
-							"name": "itemIds",
-							"type": "uint128[]"
-						},
-						{
-							"internalType": "uint128[]",
-							"name": "quantities",
-							"type": "uint128[]"
-						},
-						{
-							"internalType": "uint128",
-							"name": "totalPrice",
-							"type": "uint128"
-						},
-						{
-							"internalType": "enum Structs.OrderStatus",
-							"name": "status",
-							"type": "uint8"
-						},
-						{
-							"internalType": "uint128",
-							"name": "timestamp",
-							"type": "uint128"
-						}
-					],
-					"internalType": "struct Structs.Order[]",
-					"name": "",
-					"type": "tuple[]"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "getMyOrders",
-			"outputs": [
-				{
-					"components": [
-						{
-							"internalType": "uint128",
-							"name": "id",
-							"type": "uint128"
-						},
-						{
-							"internalType": "address",
-							"name": "customer",
-							"type": "address"
-						},
-						{
-							"internalType": "uint128",
-							"name": "restaurantId",
-							"type": "uint128"
-						},
-						{
-							"internalType": "uint128[]",
-							"name": "itemIds",
-							"type": "uint128[]"
-						},
-						{
-							"internalType": "uint128[]",
-							"name": "quantities",
-							"type": "uint128[]"
-						},
-						{
-							"internalType": "uint128",
-							"name": "totalPrice",
-							"type": "uint128"
-						},
-						{
-							"internalType": "enum Structs.OrderStatus",
-							"name": "status",
-							"type": "uint8"
-						},
-						{
-							"internalType": "uint128",
-							"name": "timestamp",
-							"type": "uint128"
-						}
-					],
-					"internalType": "struct Structs.Order[]",
-					"name": "",
-					"type": "tuple[]"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint128",
 					"name": "orderId",
 					"type": "uint128"
 				}
 			],
-			"name": "getOrderDetails",
+			"name": "getOrder",
 			"outputs": [
 				{
 					"components": [
@@ -350,7 +157,7 @@
 							"type": "uint128"
 						},
 						{
-							"internalType": "enum Structs.OrderStatus",
+							"internalType": "enum OrderStatus",
 							"name": "status",
 							"type": "uint8"
 						},
@@ -358,78 +165,16 @@
 							"internalType": "uint128",
 							"name": "timestamp",
 							"type": "uint128"
+						},
+						{
+							"internalType": "uint128",
+							"name": "preparationTime",
+							"type": "uint128"
 						}
 					],
-					"internalType": "struct Structs.Order",
-					"name": "order",
+					"internalType": "struct Order",
+					"name": "",
 					"type": "tuple"
-				},
-				{
-					"components": [
-						{
-							"internalType": "uint128",
-							"name": "id",
-							"type": "uint128"
-						},
-						{
-							"internalType": "uint128",
-							"name": "restaurantId",
-							"type": "uint128"
-						},
-						{
-							"internalType": "string",
-							"name": "name",
-							"type": "string"
-						},
-						{
-							"internalType": "string",
-							"name": "imageUrl",
-							"type": "string"
-						},
-						{
-							"internalType": "string",
-							"name": "videoUrl",
-							"type": "string"
-						},
-						{
-							"internalType": "uint128",
-							"name": "price",
-							"type": "uint128"
-						},
-						{
-							"internalType": "bool",
-							"name": "available",
-							"type": "bool"
-						},
-						{
-							"internalType": "string",
-							"name": "description",
-							"type": "string"
-						},
-						{
-							"internalType": "string",
-							"name": "category",
-							"type": "string"
-						},
-						{
-							"internalType": "uint128",
-							"name": "totalRating",
-							"type": "uint128"
-						},
-						{
-							"internalType": "uint128",
-							"name": "ratingCount",
-							"type": "uint128"
-						}
-					],
-					"internalType": "struct Structs.MenuItem[]",
-					"name": "items",
-					"type": "tuple[]"
-				},
-				{
-					"internalType": "uint128[]",
-					"name": "quantities",
-					"type": "uint128[]"
 				}
 			],
 			"stateMutability": "view",
@@ -466,7 +211,7 @@
 					"type": "uint128"
 				},
 				{
-					"internalType": "enum Structs.OrderStatus",
+					"internalType": "enum OrderStatus",
 					"name": "status",
 					"type": "uint8"
 				}

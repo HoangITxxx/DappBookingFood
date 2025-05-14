@@ -7,28 +7,12 @@
 		"abi": [
 			{
 				"inputs": [],
-				"stateMutability": "nonpayable",
-				"type": "constructor"
-			},
-			{
-				"inputs": [],
-				"name": "FailedCall",
+				"name": "InvalidInitialization",
 				"type": "error"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "balance",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "needed",
-						"type": "uint256"
-					}
-				],
-				"name": "InsufficientBalance",
+				"inputs": [],
+				"name": "NotInitializing",
 				"type": "error"
 			},
 			{
@@ -57,6 +41,19 @@
 				"anonymous": false,
 				"inputs": [
 					{
+						"indexed": false,
+						"internalType": "uint64",
+						"name": "version",
+						"type": "uint64"
+					}
+				],
+				"name": "Initialized",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
 						"indexed": true,
 						"internalType": "address",
 						"name": "previousOwner",
@@ -76,32 +73,13 @@
 				"anonymous": false,
 				"inputs": [
 					{
-						"indexed": false,
-						"internalType": "address",
-						"name": "recipient",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint128",
-						"name": "amount",
-						"type": "uint128"
-					}
-				],
-				"name": "PaymentReleased",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
+						"indexed": true,
 						"internalType": "uint128",
 						"name": "restaurantId",
 						"type": "uint128"
 					},
 					{
-						"indexed": false,
+						"indexed": true,
 						"internalType": "address",
 						"name": "owner",
 						"type": "address"
@@ -109,106 +87,6 @@
 				],
 				"name": "RestaurantRegistered",
 				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "address",
-						"name": "user",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "enum RestaurantManager.Role",
-						"name": "role",
-						"type": "uint8"
-					}
-				],
-				"name": "RoleAssigned",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "uint8",
-						"name": "newPercentage",
-						"type": "uint8"
-					}
-				],
-				"name": "ServiceFeeUpdated",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "address",
-						"name": "staff",
-						"type": "address"
-					},
-					{
-						"indexed": false,
-						"internalType": "uint128",
-						"name": "restaurantId",
-						"type": "uint128"
-					}
-				],
-				"name": "StaffAssigned",
-				"type": "event"
-			},
-			{
-				"inputs": [],
-				"name": "MAX_SERVICE_FEE",
-				"outputs": [
-					{
-						"internalType": "uint8",
-						"name": "",
-						"type": "uint8"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "recipient",
-						"type": "address"
-					},
-					{
-						"internalType": "uint128",
-						"name": "amount",
-						"type": "uint128"
-					}
-				],
-				"name": "addPendingWithdrawal",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "user",
-						"type": "address"
-					},
-					{
-						"internalType": "enum RestaurantManager.Role",
-						"name": "role",
-						"type": "uint8"
-					}
-				],
-				"name": "assignRole",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
 			},
 			{
 				"inputs": [
@@ -229,6 +107,51 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint128",
+						"name": "restaurantId",
+						"type": "uint128"
+					}
+				],
+				"name": "getRestaurantOwner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_owner",
+						"type": "address"
+					}
+				],
+				"name": "initialize",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "nextRestaurantId",
+				"outputs": [
+					{
+						"internalType": "uint128",
+						"name": "",
+						"type": "uint128"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "owner",
 				"outputs": [
@@ -236,49 +159,6 @@
 						"internalType": "address",
 						"name": "",
 						"type": "address"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"name": "ownerRestaurants",
-				"outputs": [
-					{
-						"internalType": "uint128",
-						"name": "",
-						"type": "uint128"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "pendingWithdrawals",
-				"outputs": [
-					{
-						"internalType": "uint128",
-						"name": "",
-						"type": "uint128"
 					}
 				],
 				"stateMutability": "view",
@@ -294,6 +174,19 @@
 						"type": "uint128"
 					}
 				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "staff",
+						"type": "address"
+					}
+				],
+				"name": "removeStaff",
+				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
 			},
@@ -334,38 +227,12 @@
 				"name": "roles",
 				"outputs": [
 					{
-						"internalType": "enum RestaurantManager.Role",
+						"internalType": "enum Role",
 						"name": "",
 						"type": "uint8"
 					}
 				],
 				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "serviceFeePercentage",
-				"outputs": [
-					{
-						"internalType": "uint8",
-						"name": "",
-						"type": "uint8"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint8",
-						"name": "percentage",
-						"type": "uint8"
-					}
-				],
-				"name": "setServiceFeePercentage",
-				"outputs": [],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -376,7 +243,7 @@
 						"type": "address"
 					}
 				],
-				"name": "staffRestaurant",
+				"name": "staffRestaurants",
 				"outputs": [
 					{
 						"internalType": "uint128",
@@ -399,25 +266,18 @@
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "withdrawServiceFees",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
 			}
 		],
 		"devdoc": {
 			"errors": {
-				"FailedCall()": [
+				"InvalidInitialization()": [
 					{
-						"details": "A call to an address target failed. The target may have reverted."
+						"details": "The contract is already initialized."
 					}
 				],
-				"InsufficientBalance(uint256,uint256)": [
+				"NotInitializing()": [
 					{
-						"details": "The ETH balance of the account is not enough to perform the operation."
+						"details": "The contract is not initializing."
 					}
 				],
 				"OwnableInvalidOwner(address)": [
@@ -430,6 +290,11 @@
 						"details": "The caller account is not authorized to perform an operation."
 					}
 				]
+			},
+			"events": {
+				"Initialized(uint64)": {
+					"details": "Triggered when the contract has been initialized or reinitialized."
+				}
 			},
 			"kind": "dev",
 			"methods": {
@@ -467,44 +332,60 @@
 		"remappings": []
 	},
 	"sources": {
-		"@openzeppelin/contracts/access/Ownable.sol": {
-			"keccak256": "0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb",
+		"@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol": {
+			"keccak256": "0xc163fcf9bb10138631a9ba5564df1fa25db9adff73bd9ee868a8ae1858fe093a",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://8ed324d3920bb545059d66ab97d43e43ee85fd3bd52e03e401f020afb0b120f6",
-				"dweb:/ipfs/QmfEckWLmZkDDcoWrkEvMWhms66xwTLff9DDhegYpvHo1a"
+				"bzz-raw://9706d43a0124053d9880f6e31a59f31bc0a6a3dc1acd66ce0a16e1111658c5f6",
+				"dweb:/ipfs/QmUFmfowzkRwGtDu36cXV9SPTBHJ3n7dG9xQiK5B28jTf2"
 			]
 		},
-		"@openzeppelin/contracts/utils/Address.sol": {
-			"keccak256": "0xaaa1d17c1129b127a4a401db2fbd72960e2671474be3d08cae71ccdc42f7624c",
+		"@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol": {
+			"keccak256": "0xdb4d24ee2c087c391d587cd17adfe5b3f9d93b3110b1388c2ab6c7c0ad1dcd05",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://cb2f27cd3952aa667e198fba0d9b7bcec52fbb12c16f013c25fe6fb52b29cc0e",
-				"dweb:/ipfs/QmeuohBFoeyDPZA9JNCTEDz3VBfBD4EABWuWXVhHAuEpKR"
+				"bzz-raw://ab7b6d5b9e2b88176312967fe0f0e78f3d9a1422fa5e4b64e2440c35869b5d08",
+				"dweb:/ipfs/QmXKYWWyzcLg1B2k7Sb1qkEXgLCYfXecR9wYW5obRzWP1Q"
 			]
 		},
-		"@openzeppelin/contracts/utils/Context.sol": {
-			"keccak256": "0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2",
+		"@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol": {
+			"keccak256": "0xdbef5f0c787055227243a7318ef74c8a5a1108ca3a07f2b3a00ef67769e1e397",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://6a708e8a5bdb1011c2c381c9a5cfd8a9a956d7d0a9dc1bd8bcdaf52f76ef2f12",
-				"dweb:/ipfs/Qmax9WHBnVsZP46ZxEMNRQpLQnrdE4dK8LehML1Py8FowF"
+				"bzz-raw://08e39f23d5b4692f9a40803e53a8156b72b4c1f9902a88cd65ba964db103dab9",
+				"dweb:/ipfs/QmPKn6EYDgpga7KtpkA8wV2yJCYGMtc9K4LkJfhKX2RVSV"
 			]
 		},
-		"@openzeppelin/contracts/utils/Errors.sol": {
-			"keccak256": "0x6afa713bfd42cf0f7656efa91201007ac465e42049d7de1d50753a373648c123",
+		"access/RoleAccess.sol": {
+			"keccak256": "0x069c0d264b725468cb271467a2f3db37ef9f6af392eb03a1f609bca828d94818",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://ba1d02f4847670a1b83dec9f7d37f0b0418d6043447b69f3a29a5f9efc547fcf",
-				"dweb:/ipfs/QmQ7iH2keLNUKgq2xSWcRmuBE5eZ3F5whYAkAGzCNNoEWB"
+				"bzz-raw://06135d76213b4b4d3384d201ccc770d6754a45e9a02655218a64a7f86053293d",
+				"dweb:/ipfs/QmPBmdyyofgknAsEyit7igUnbmRZ55Tro9zqfRvA55qFu7"
 			]
 		},
 		"contracts/RestaurantManager.sol": {
-			"keccak256": "0x770cf251c8a60e6946de3cb361ea406231c9905f8e8791e0c4f9df9d2e753328",
+			"keccak256": "0x30bdbb86869dfc7d310d7b7b43c3c5c2bff1dc80c721e881f5b9d781a503b631",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://bcacfd56a4b47863a68f7f9dc3a447fba0ff60515441a4fe887c97deb5bd25d9",
-				"dweb:/ipfs/QmahXE2eKRXcVG3HBtZPeJHUmrNWCV26cgUb3iA7N9RKfY"
+				"bzz-raw://d3e94b50804a56698ae21c6a70f1a5457e4f0ca5dd56618b2da2d69eeb333286",
+				"dweb:/ipfs/QmQhEszahXm7h9h9bXyj12nxkTHMF6f1QR5EzdxKog5ntV"
+			]
+		},
+		"interfaces/IRestaurantManager.sol": {
+			"keccak256": "0x728c42e0822af1c457cfe953fbc2611c6817ad18df3ab07b76b4b7971df62cf1",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://3001214cafaaab608958e2cc1419c08426c914892e35ac010fe4fe2864b5d016",
+				"dweb:/ipfs/QmUZ45bpeZqfRHnHgBkjL57fFP532DB67chJfMFY5FSx6S"
+			]
+		},
+		"structs/FoodTypes.sol": {
+			"keccak256": "0x6349ed8defd63089fdb5a53685a568d3ab0ef9d63c5ca7ea733573e0bd7734d7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c896dd06df3864f42b2906d0a8a59799b57fbfe18094202d0494b4a198ea42b4",
+				"dweb:/ipfs/Qma59Lyc5E9p32rumk56SkEhyJHbqFV7wVJveKj7gg5h4m"
 			]
 		}
 	},

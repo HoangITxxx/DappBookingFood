@@ -55,9 +55,10 @@ contract SMCDappBookingFood is
 
     modifier onlyStaffOrAdminOrOwner(uint128 restaurantId) {
         require(
-            roles[msg.sender] == Role.Staff && staffRestaurant[msg.sender] == restaurantId ||
-            roles[msg.sender] == Role.Admin ||
-            restaurantOwners[restaurantId] == msg.sender,
+            (roles[msg.sender] == Role.Staff &&
+                staffRestaurant[msg.sender] == restaurantId) ||
+                roles[msg.sender] == Role.Admin ||
+                restaurantOwners[restaurantId] == msg.sender,
             "Unauthorized: Staff, Admin, or Owner only"
         );
         _;
@@ -65,14 +66,18 @@ contract SMCDappBookingFood is
 
     modifier onlyAdminOrCustomer() {
         require(
-            roles[msg.sender] == Role.Admin || roles[msg.sender] == Role.Customer,
+            roles[msg.sender] == Role.Admin ||
+                roles[msg.sender] == Role.Customer,
             "Only admin or customer"
         );
         _;
     }
 
     modifier onlyCustomer() {
-        require(roles[msg.sender] == Role.Customer, "Unauthorized: Customer only");
+        require(
+            roles[msg.sender] == Role.Customer,
+            "Unauthorized: Customer only"
+        );
         _;
     }
 
@@ -83,18 +88,25 @@ contract SMCDappBookingFood is
 
     modifier validMenuItemId(uint128 restaurantId, uint128 menuId) {
         require(menuId > 0 && menuId < nextMenuId, "Invalid menu item ID");
-        require(menuByRestaurant[restaurantId][menuId].id != 0, "Menu item does not exist");
+        require(
+            menuByRestaurant[restaurantId][menuId].id != 0,
+            "Menu item does not exist"
+        );
         _;
     }
 
     modifier onlyRestaurantOwner(uint128 restaurantId) {
-        require(restaurantOwners[restaurantId] == msg.sender, "Not restaurant owner");
+        require(
+            restaurantOwners[restaurantId] == msg.sender,
+            "Not restaurant owner"
+        );
         _;
     }
 
     modifier onlyStaffOrCustomer() {
         require(
-            roles[msg.sender] == Role.Customer || roles[msg.sender] == Role.Staff,
+            roles[msg.sender] == Role.Customer ||
+                roles[msg.sender] == Role.Staff,
             "Unauthorized: Staff or Customer only"
         );
         _;
@@ -110,20 +122,27 @@ contract SMCDappBookingFood is
         return restaurantId;
     }
 
-    function assignStaff(address staff, uint128 restaurantId)
-        external
-        override
-        onlyRestaurantOwner(restaurantId)
-    {
+    function assignStaff(
+        address staff,
+        uint128 restaurantId
+    ) external override onlyRestaurantOwner(restaurantId) {
         require(staff != address(0), "Invalid address");
-        require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
+        require(
+            restaurantOwners[restaurantId] != address(0),
+            "Restaurant does not exist"
+        );
         roles[staff] = Role.Staff;
         staffRestaurant[staff] = restaurantId;
         emit StaffAssigned(staff, restaurantId);
     }
 
-    function setServiceFeePercentage(uint8 percentage) external override onlyAdmin {
-        require(percentage <= Constants.MAX_SERVICE_FEE, "Service fee too high");
+    function setServiceFeePercentage(
+        uint8 percentage
+    ) external override onlyAdmin {
+        require(
+            percentage <= Constants.MAX_SERVICE_FEE,
+            "Service fee too high"
+        );
         serviceFeePercentage = percentage;
         emit ServiceFeeUpdated(percentage);
     }
@@ -139,7 +158,10 @@ contract SMCDappBookingFood is
         string memory category
     ) external override onlyStaffOrAdminOrOwner(restaurantId) {
         require(bytes(name).length > 0 && price > 0, "Invalid data");
-        require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
+        require(
+            restaurantOwners[restaurantId] != address(0),
+            "Restaurant does not exist"
+        );
         menuByRestaurant[restaurantId][nextMenuId] = MenuItem({
             id: nextMenuId,
             restaurantId: restaurantId,
@@ -168,7 +190,12 @@ contract SMCDappBookingFood is
         bool available,
         string memory description,
         string memory category
-    ) external override onlyStaffOrAdminOrOwner(restaurantId) validMenuItemId(restaurantId, menuId) {
+    )
+        external
+        override
+        onlyStaffOrAdminOrOwner(restaurantId)
+        validMenuItemId(restaurantId, menuId)
+    {
         require(bytes(name).length > 0 && price > 0, "Invalid data");
         MenuItem storage item = menuByRestaurant[restaurantId][menuId];
         item.name = name;
@@ -181,7 +208,10 @@ contract SMCDappBookingFood is
         emit MenuItemUpdated(menuId, restaurantId);
     }
 
-    function removeMenuItem(uint128 restaurantId, uint128 menuId)
+    function removeMenuItem(
+        uint128 restaurantId,
+        uint128 menuId
+    )
         external
         override
         onlyStaffOrAdminOrOwner(restaurantId)
@@ -191,20 +221,27 @@ contract SMCDappBookingFood is
         emit MenuItemRemoved(menuId, restaurantId);
     }
 
-    function getMenuItems(uint128 restaurantId, uint128 start, uint128 limit)
-        external
-        view
-        override
-        returns (MenuItem[] memory)
-    {
+    function getMenuItems(
+        uint128 restaurantId,
+        uint128 start,
+        uint128 limit
+    ) external view override returns (MenuItem[] memory) {
         uint128 count = 0;
-        for (uint128 i = start + 1; i <= nextMenuId && i <= start + limit; i++) {
+        for (
+            uint128 i = start + 1;
+            i <= nextMenuId && i <= start + limit;
+            i++
+        ) {
             if (menuByRestaurant[restaurantId][i].id != 0) count++;
         }
 
         MenuItem[] memory items = new MenuItem[](count);
         uint128 index = 0;
-        for (uint128 i = start + 1; i <= nextMenuId && i <= start + limit; i++) {
+        for (
+            uint128 i = start + 1;
+            i <= nextMenuId && i <= start + limit;
+            i++
+        ) {
             if (menuByRestaurant[restaurantId][i].id != 0) {
                 items[index] = menuByRestaurant[restaurantId][i];
                 index++;
@@ -213,11 +250,11 @@ contract SMCDappBookingFood is
         return items;
     }
 
-    function rateMenuItem(uint128 restaurantId, uint128 menuId, uint8 rating)
-        external
-        override
-        validMenuItemId(restaurantId, menuId)
-    {
+    function rateMenuItem(
+        uint128 restaurantId,
+        uint128 menuId,
+        uint8 rating
+    ) external override validMenuItemId(restaurantId, menuId) {
         require(rating >= 1 && rating <= 5, "Invalid rating");
         MenuItem storage item = menuByRestaurant[restaurantId][menuId];
         item.totalRating += rating;
@@ -225,7 +262,10 @@ contract SMCDappBookingFood is
         emit MenuItemRated(menuId, rating);
     }
 
-    function getAverageRating(uint128 restaurantId, uint128 menuId)
+    function getAverageRating(
+        uint128 restaurantId,
+        uint128 menuId
+    )
         public
         view
         override
@@ -243,15 +283,24 @@ contract SMCDappBookingFood is
         uint128[] memory itemIds,
         uint128[] memory quantities
     ) external payable override onlyAdminOrCustomer nonReentrant {
-        require(itemIds.length > 0 && itemIds.length == quantities.length, "Invalid input");
-        require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
+        require(
+            itemIds.length > 0 && itemIds.length == quantities.length,
+            "Invalid input"
+        );
+        require(
+            restaurantOwners[restaurantId] != address(0),
+            "Restaurant does not exist"
+        );
 
         uint128 total = 0;
         OrderDetail[] memory details = new OrderDetail[](itemIds.length);
         for (uint256 i = 0; i < itemIds.length; i++) {
             MenuItem storage item = menuByRestaurant[restaurantId][itemIds[i]];
             require(item.available, "Item unavailable");
-            require(item.restaurantId == restaurantId, "Item does not belong to restaurant");
+            require(
+                item.restaurantId == restaurantId,
+                "Item does not belong to restaurant"
+            );
             total += item.price * quantities[i];
             orderCountDetails[nextOrderId][itemIds[i]] = quantities[i];
             details[i] = OrderDetail({
@@ -292,18 +341,14 @@ contract SMCDappBookingFood is
         nextOrderId++;
     }
 
-    function cancelOrder(uint128 orderId)
-        external
-        override
-        onlyCustomer
-        nonReentrant
-        validOrderId(orderId)
-    {
+    function cancelOrder(
+        uint128 orderId
+    ) external override onlyCustomer nonReentrant validOrderId(orderId) {
         Order storage order = orders[orderId];
         require(order.customer == msg.sender, "Not your order");
         require(
             order.status == OrderStatus.Placed ||
-            order.status == OrderStatus.Confirmed,
+                order.status == OrderStatus.Confirmed,
             "Cannot cancel at this stage"
         );
 
@@ -314,13 +359,9 @@ contract SMCDappBookingFood is
         emit RefundProcessed(msg.sender, order.totalPrice);
     }
 
-    function completeOrder(uint128 orderId)
-        external
-        override
-        onlyAdminOrCustomer
-        nonReentrant
-        validOrderId(orderId)
-    {
+    function completeOrder(
+        uint128 orderId
+    ) external override onlyAdminOrCustomer nonReentrant validOrderId(orderId) {
         Order storage order = orders[orderId];
         require(order.customer == msg.sender, "Not your order");
         require(order.status == OrderStatus.Ready, "Order not ready");
@@ -331,7 +372,10 @@ contract SMCDappBookingFood is
         emit OrderStatusUpdated(orderId, OrderStatus.Completed);
     }
 
-    function updateOrderStatus(uint128 orderId, OrderStatus status)
+    function updateOrderStatus(
+        uint128 orderId,
+        OrderStatus status
+    )
         external
         override
         onlyStaffOrAdminOrOwner(orders[orderId].restaurantId)
@@ -340,20 +384,26 @@ contract SMCDappBookingFood is
     {
         Order storage order = orders[orderId];
         require(order.status != OrderStatus.Cancelled, "Order is cancelled");
-        require(order.status != OrderStatus.Completed, "Order already completed");
+        require(
+            order.status != OrderStatus.Completed,
+            "Order already completed"
+        );
 
         if (status == OrderStatus.Confirmed) {
-            require(order.status == OrderStatus.Placed, "Invalid status transition");
+            require(
+                order.status == OrderStatus.Placed,
+                "Invalid status transition"
+            );
         } else if (status == OrderStatus.Preparing) {
             require(
                 order.status == OrderStatus.Placed ||
-                order.status == OrderStatus.Confirmed,
+                    order.status == OrderStatus.Confirmed,
                 "Invalid status transition"
             );
         } else if (status == OrderStatus.Ready) {
             require(
                 order.status == OrderStatus.Preparing ||
-                order.status == OrderStatus.Confirmed,
+                    order.status == OrderStatus.Confirmed,
                 "Invalid status transition"
             );
         } else {
@@ -364,7 +414,13 @@ contract SMCDappBookingFood is
         emit OrderStatusUpdated(orderId, status);
     }
 
-    function getMyOrders() external view override onlyAdminOrCustomer returns (Order[] memory) {
+    function getMyOrders()
+        external
+        view
+        override
+        onlyAdminOrCustomer
+        returns (Order[] memory)
+    {
         uint128[] storage ids = customerOrders[msg.sender];
         Order[] memory result = new Order[](ids.length);
         for (uint256 i = 0; i < ids.length; i++) {
@@ -373,7 +429,9 @@ contract SMCDappBookingFood is
         return result;
     }
 
-    function getOrderDetails(uint128 orderId)
+    function getOrderDetails(
+        uint128 orderId
+    )
         external
         view
         override
@@ -398,13 +456,10 @@ contract SMCDappBookingFood is
         return (order, items, quantities);
     }
 
-    function getAllOrders(uint128 start, uint128 limit)
-        external
-        view
-        override
-        onlyAdmin
-        returns (Order[] memory)
-    {
+    function getAllOrders(
+        uint128 start,
+        uint128 limit
+    ) external view override onlyAdmin returns (Order[] memory) {
         uint128 count = nextOrderId - 1 > start ? nextOrderId - 1 - start : 0;
         if (count > limit) count = limit;
 
@@ -423,8 +478,15 @@ contract SMCDappBookingFood is
         string memory comment
     ) external override onlyStaffOrCustomer {
         require(rating >= 1 && rating <= 5, "Rating must be between 1 and 5");
-        require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
-        require(roles[employee] == Role.Staff && staffRestaurant[employee] == restaurantId, "Invalid employee");
+        require(
+            restaurantOwners[restaurantId] != address(0),
+            "Restaurant does not exist"
+        );
+        require(
+            roles[employee] == Role.Staff &&
+                staffRestaurant[employee] == restaurantId,
+            "Invalid employee"
+        );
 
         RatingForEmployee memory newRating = RatingForEmployee({
             customer: msg.sender,
@@ -439,13 +501,16 @@ contract SMCDappBookingFood is
         emit EmployeeRated(employee, msg.sender, restaurantId, rating, comment);
     }
 
-    function rateRestaurant(uint128 restaurantId, uint8 rating, string memory comment)
-        external
-        override
-        onlyAdminOrCustomer
-    {
+    function rateRestaurant(
+        uint128 restaurantId,
+        uint8 rating,
+        string memory comment
+    ) external override onlyAdminOrCustomer {
         require(rating >= 1 && rating <= 5, "Rating must be between 1 and 5");
-        require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
+        require(
+            restaurantOwners[restaurantId] != address(0),
+            "Restaurant does not exist"
+        );
 
         RatingForRestaurant memory newRating = RatingForRestaurant({
             customer: msg.sender,
@@ -459,22 +524,19 @@ contract SMCDappBookingFood is
         emit RestaurantRated(restaurantId, msg.sender, rating, comment);
     }
 
-    function getEmployeeRatings(address employee)
-        external
-        view
-        override
-        returns (RatingForEmployee[] memory)
-    {
+    function getEmployeeRatings(
+        address employee
+    ) external view override returns (RatingForEmployee[] memory) {
         return employeeRatings[employee];
     }
 
-    function getRestaurantRatings(uint128 restaurantId)
-        external
-        view
-        override
-        returns (RatingForRestaurant[] memory)
-    {
-        require(restaurantOwners[restaurantId] != address(0), "Restaurant does not exist");
+    function getRestaurantRatings(
+        uint128 restaurantId
+    ) external view override returns (RatingForRestaurant[] memory) {
+        require(
+            restaurantOwners[restaurantId] != address(0),
+            "Restaurant does not exist"
+        );
         return restaurantRatings[restaurantId];
     }
 }
